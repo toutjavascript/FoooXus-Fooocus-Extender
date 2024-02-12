@@ -25,7 +25,8 @@ venv\Scripts\activate
 # Install requirements
 pip install -r requirements.txt
 
-# Edit the config.json file and fill in the fooocus install directory and check the fooocus directory and path
+# Edit the config.json file  
+# fill in the fooocus install directory check the fooocus address
     "host": "127.0.0.1",        
     "port": 7878,
     "fooocus-directory": "C:\\Users\\lannister\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus",
