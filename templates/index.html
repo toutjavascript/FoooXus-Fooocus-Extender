@@ -1,0 +1,84 @@
+{% extends 'structure.html' %}
+
+{% block content %}
+
+
+
+    <div id="loading" class="m-5">
+        <div class="position-relative m-5">
+            <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 3px;">
+                <div  id="progress-bar-step" class="progress-bar progress-bar-foooxus" style="width: 0%"></div>
+            </div>
+            <button id="button-step1" type="button" class="position-absolute top-0 start-0 translate-middle btn btn-lg btn-secondary rounded-pill foooxus-step " style="width: 3rem; height:3rem;">1</button>
+            <button id="button-step2" type="button" class="position-absolute top-0 start-33 translate-middle btn btn-lg btn-secondary rounded-pill foooxus-step " style="width: 3rem; height:3rem;">2</button>
+            <button id="button-step3" type="button" class="position-absolute top-0 start-66 translate-middle btn btn-lg btn-secondary rounded-pill foooxus-step " style="width: 3rem; height:3rem;">3</button>
+            <button id="button-step4" type="button" class="position-absolute top-0 start-100 translate-middle btn btn-lg btn-secondary rounded-pill foooxus-step " style="width: 3rem; height:3rem;">4</button>
+        </div>
+
+        <div class="container mt-2" id="containerStep">
+            <div class="row m-2 p-2 align-middle text-center">
+                <p id="label-step" class="p-0 m-0 text-center fs-4 fw-bolder"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="help">
+        <div class="row" >
+            <div class="col-6">
+                <h2>What is FoooXus: Fooocus Extender?</h2>
+                <p>FoooXus: Fooocus Extender is a web application that allows you to manage your Fooocus installation.</p>
+                <p>It is a simple and intuitive tool that will help you to organize your models, styles, loras and your generated images.</p>
+                <p>Foooxus uses <b>Fooocus Gradio API</b> and increases generation possibities :<ul>
+                    <li>create presets prompts on Models, Styles and LoRAs to create grids of renders.</li>
+                    <li>Launch all your works in UI. They will be add to the queue and rendered in background.</li>
+                    <li>Prepare the works during lunch time or night and get all the results when you come back.</li>
+                </ul>
+                </p>
+                <p>This first release is not finalized but Fooocus users asked me to publish it as soon as possible. I am working on an UI to generate multiple images by variating one or more parameters.<br>
+                    So you will can generate a picture with multiple Guidance scale values, different refiners and Loras in one batch. You will choose the best images after completion.
+                </p>
+            </div>
+            <div class="col-6">
+                <h2>How does it work?</h2>
+                <p>This web app is connected to a python web server running on <span id="introFoooxusURL"></span></p>
+                <p>Your Fooocus install is running on <span id="introFooocusURL"></span></p>
+                <p>When you interact with Fooocus User Interface, you activate FoooXus python programm, which exchanges informations and images with Fooocus. </p>
+                <p>If FoooXus python app or Fooocus app are closed, the web UI will detect it and no work could be processed.</p>
+                <p id="messageApp"></p>
+            </div>       
+        </div>
+        <div class="row" >
+            <div class="col-12">   
+                <h2>How presets are working?</h2>
+                <p>Presets are set in the <code>config.json</code> file. You can add or remove presets on each part (Models, Styles and LoRAs).</p>
+                <p>Open the Models Tab. You will see the presets and the Models list. No image are generated at first start.</p>
+                <p>Click on the button to launch generation of missing picture. And wait a little to view images.</p>
+                <p>Images are stored in <code>./outputs/illustrations/styles/</code> folder, reduced to 512*512 with 80% JPG compression to gain space.</p>
+                <p>The <code>./outputs/tmp/</code> folder stored all the generated images. You can empty it sometimes.</p>
+                <p>Don't forget that all Fooocus generated images are stored in the <code>your/fooocus/install/outputs/YYYY-MM-DD/</code> folder. You can manage all your images with my Github repository <a href="https://github.com/toutjavascript/Fooocus-Log-Viewer" target="blank"><i class="fa-brands fa-github"></i> toutjavascript/Fooocus-Log-Viewer</a>.</p>
+            </div>
+        </div>
+        
+
+        <div class="row" >
+            <div class="col-12">             
+                <h2>Other informations</h2>
+
+                <div class="alert alert-dark" role="alert">
+                    <p>FoooXus depends on Fooocus app. Sometimes, a Fooocus update changes the API calls and can break FoooXus. Run Fooocus with no-update tag to avoid that.</p>
+                </div>
+   
+                <p>Please, share ideas on Github repository <a href="" target="blank"><i class="fa-brands fa-github"></i> toutjavascript/foooxus-fooocus-extender</a></p>
+                <p>Also discover my Github repository <a href="https://github.com/toutjavascript/Fooocus-Log-Viewer" target="blank"><i class="fa-brands fa-github"></i> toutjavascript/Fooocus-Log-Viewer</a> to easily view all your generated images.</p>
+                <p>Made by <a href="https://github.com/toutjavascript" target="blank"><i class="fa-brands fa-github"></i> @toutjavascript</a> / <a href="https://www.toutjavascript.com/" target="blank"><i class="fa-brands fa-edge"></i> toutjavascript.com</a></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container p-0 m-0" id="app">
+    </div>
+
+
+{% endblock %}

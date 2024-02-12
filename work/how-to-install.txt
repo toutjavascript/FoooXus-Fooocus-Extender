@@ -1,0 +1,4 @@
+
+Pour générer le fichier requirement.txt
+python -m pipreqs.pipreqs ./ --encoding=utf-8 --force
+

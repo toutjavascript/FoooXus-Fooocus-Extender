@@ -1,0 +1,227 @@
+
+/* Extend the default bootstrap navbar */
+
+code {
+    color:#7748a0 !important;
+    font-weight: bold;
+}
+
+body, label, div, input, select, textarea, button, span, a, button {
+    font-size:15px;
+}
+
+.start-20{left:20%!important}
+.start-25{left:25%!important}
+.start-33{left:33%!important}
+.start-40{left:40%!important}
+.start-60{left:60%!important}
+.start-66{left:66%!important}
+.start-75{left:20%!important}
+.start-80{left:80%!important}
+
+.btn-primary {
+    background-color: #813FBB !important;
+    border-color: #813FBB !important;
+}
+.btn-primary:hover {
+    background-color: #813FBB !important;
+    border-color: #813FBB !important;
+}
+
+.progress-bar-foooxus {
+    background-color: #813FBB !important;
+}
+.form-label {
+    font-weight: bold;
+    margin-bottom:0px;
+    margin-top:8px;
+}
+
+.row-cols-7 > * {
+  flex: 0 0 14.28% !important;
+  max-width: 14.28% !important;
+}
+.row-cols-8 > * {
+  flex: 0 0 12.5% !important;
+  max-width: 12.5% !important;
+}
+.row-cols-9 > * {
+    flex: 0 0 11.1% !important;
+   max-width: 11.1% !important;
+}
+.row-cols-10 > * {
+    flex: 0 0 10% !important;
+    max-width: 10% !important;
+}
+.row-cols-11 > * {
+    flex: 0 0 9.09% !important;
+    max-width: 9.09% !important;
+}
+.row-cols-12 > * {
+    flex: 0 0 8.333% !important;
+    max-width: 8.333% !important;
+}
+.row-cols-13 > * {
+    flex: 0 0 7.69% !important;
+    max-width: 7.69% !important;
+}
+.row-cols-14 > * {
+    flex: 0 0 7.14% !important;
+    max-width: 7.14% !important;
+}
+
+
+/* Extend jbox */
+.jBox-title {
+    padding:0px !important;
+}
+
+/* Foooxus CSS */
+
+.preset-param {
+    font-size: 12px;
+}
+.preset-name {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+img#FoooLogo {
+    border-radius:50%;
+}
+
+
+div#step {
+    font-weight: bold;
+    color:#fff;
+
+}
+
+div#containerStep {
+    border:1px solid #813FBB;
+    background-color: #813FBB;
+    border-radius: 10px;
+    color:#fff;
+}
+
+
+span.IPconnected {
+    font-weight: bold;
+    background-color: #6f0;
+    color:#000;
+    border-radius: 10px;
+    padding:2px 6px
+}
+span.IPwaiting {
+    font-weight: bold;
+    background-color:#ccc;
+    color:#000;
+    border-radius: 10px;
+    padding:2px 6px
+}
+span.IPdisconnected {
+    font-weight: bold;
+    background-color: #f00;
+    color:#fff;
+    border-radius: 10px;
+    padding:2px 6px
+}
+
+div#hardware {
+    margin-top:2px;
+    font-size:12px !important;
+    font-weight: bold;
+}
+
+button.foooxus-step {
+    font-weight: bold;
+}
+
+img.newImageNotice {
+    width: 320px;
+    height: auto;
+}
+
+img.illustration {
+    max-width:256px;
+    height: auto;
+}
+
+.text-help {
+    font-size: 13px;
+    color: #666;
+
+}
+
+img.responsive {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+div.imgViewer {
+  font-size: 11px;
+}
+div.imgViewer .fileName {
+  overflow-x: hidden;
+}
+.p-2px {
+    padding: 2px !important;
+}
+fs-14px {
+    font-size: 14px !important;;
+}
+fs-12px {   
+    font-size: 12px !important;
+}
+fs-13px {   
+    font-size: 13px !important;
+}
+.text-prompt {
+    font-size: 13px;
+    font-weight: bold
+}
+
+/* Queue app */
+td.work-delay {
+    min-width:90px;
+}
+
+/* Menu nav */
+.menu-nav-link {
+    cursor: pointer !important;
+    border:2px solid transparent ;
+    font-weight: bold;
+    margin-left:8px;
+    color:#813FBB !important;
+}
+.menu-nav-link:hover {
+    border:2px solid #813FBB;
+}
+.menu-nav-link.active {
+    background: #813FBB !important;
+    border:2px solid #813FBB;
+    color: #fff !important;
+}
+
+/* Legend on an image */
+.image-container {
+    position: relative;
+    border: 1px solid #333;
+    background-color: #333;
+    margin:0px;
+    padding:0px;
+}
+  
+.image-title {
+    display: block;
+    margin:0px;
+    overflow-y: hidden;
+    width:100%;
+    color:#fff;
+    text-shadow:1px 1px 1px #000;
+    font-size:13px;
+    font-weight: bold;
+    background-color: #333;
+    padding: 1px;
+}

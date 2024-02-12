@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename= 'js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/jBox.all.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/ejs.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'fontawesome/css/all.min.css') }}/">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap-icons.min.css') }}/">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/jBox.all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/jBox.TooltipDark.min.css') }}">
+    <script src="{{ url_for('static', filename= 'js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/extens.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/extens.css') }}">
+    <title>FoooXus: Fooocus Extender</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-0">
+        <div class="container ">
+            <span class="navbar-brand container-fluid p-0 m-0" href="#" id="FoooBrand">
+                <div class=" ">
+                    <div class="d-flex justify-content-around ">
+
+                        <div class="fs-5  text-center ">
+                            <img id="FoooLogo" src="{{ url_for('static', filename= 'picto/foooxus.png') }}" alt="Fooocus Extens" width="80" height="80">
+                        </div>
+
+                        <div class="fs-5 flex-fill text-center ">                            
+                            FoooXus              
+                             <br>
+                            <span id="foooxusConnection" class="IPwaiting fs-6">Searching...</span> 
+
+                            <span id="foooxusQueue" type="button" class="btn btn-sm btn-secondary position-relative mx-2 cursor-default queue-tooltip" title="FoooXus Queue">
+                                 <i class="fa-solid fa-lg fa-paint-roller"></i>
+                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">30</span>
+                             </span>
+                        </div>
+                        <div id="hardware" class="fs-5  text-center">
+                        </div>
+                        <div class="fs-5 flex-fill text-center ">Fooocus <br>                        
+                            <span id="fooocusConnection" class="IPwaiting fs-6">Searching...</span>        
+                            <button id="fooocusQueue" type="button" class="btn btn-sm btn-secondary position-relative mx-2 cursor-default queue-tooltip" title="Fooocus work">
+                                 <i class="fa-solid fa-lg fa-snowflake"></i>
+                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                             </button>
+                        </div>
+                    </div>
+                </div>            
+            </span>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    </ul>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="container">
+    <ul class="nav nav-pills m-1">
+        <li class="nav-item "><span id="menu-styles" class="menu-nav-link nav-link px-2 py-1"  onclick="makeAppStyles()">Styles</a></li>
+        <li class="nav-item "><span id="menu-models" class="menu-nav-link nav-link  px-2 py-1"  onclick="makeAppModels()">Models</a></li>
+        <li class="nav-item "><span id="menu-loras" class="menu-nav-link nav-link px-2 py-1"  onclick="makeAppLoras()">LoRAs</a></li>
+        <li class="nav-item "><span id="menu-api" class="menu-nav-link nav-link   px-2 py-1"  onclick="makeAppAPI()">API</span></li>
+        <li class="nav-item "><span id="menu-queue" class="menu-nav-link nav-link   px-2 py-1"  onclick="makeAppQueue()">Queue</span></li>
+        <li class="nav-item "><span id="menu-help" class="menu-nav-link nav-link  px-2 py-1" onclick="makeAppHelp()">Help</a></li>
+    </ul>
+
+
+    {% block content %}{% endblock %}
+
+</div>
+
+
+
+<footer class="bg-body-tertiary text-center">
+    <div class="container p-4"></div>
+  
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+
+        <a class="text-body" href="https://github.com/toutjavascript"><i class="fa-brands fa-github"></i> @toutjavascript</a> - <a class="text-body" href="https://www.toutjavascript.com">www.toutjavascript.com</a>
+    </div>
+  </footer>
+
+</body>
+</html>

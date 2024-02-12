@@ -1,0 +1,38 @@
+LOG ON API
+[Parameters] Adaptive CFG = 7
+[Parameters] Sharpness = 2
+[Parameters] ADM Scale = 1.5 : 0.8 : 0.3
+[Parameters] CFG = 4.0
+[Parameters] Seed = 314159
+[Parameters] Sampler = dpmpp_sde_gpu - karras
+[Parameters] Steps = 30 - 3
+[Fooocus] Initializing ...
+[Fooocus] Loading models ...
+Refiner unloaded.
+Request to load LoRAs [['None', -2.0], ['None', -2.0], ['None', -2.0], ['None', -2.0], ['None', -2.0]] for model [C:\Users\lannister\Desktop\IA\StabilityMatrix\Data\Models\StableDiffusion\albedobaseXL_v13.safetensors].
+Requested to load SDXLClipModel
+Loading 1 new model
+unload clone 1
+[Fooocus Model Management] Moving model(s) has taken 0.94 seconds
+[Fooocus] Processing prompts ...
+[Fooocus] Encoding positive #1 ...
+[Fooocus] Encoding negative #1 ...
+[Parameters] Denoising Strength = 1.0
+[Parameters] Initial Latent shape: Image Space (1024, 1024)
+Preparation time: 1.14 seconds
+[Sampler] refiner_swap_method = joint
+[Sampler] sigma_min = 0.0291671771556139, sigma_max = 14.614643096923828
+Requested to load SDXL
+Loading 1 new model
+[Fooocus Model Management] Moving model(s) has taken 1.49 seconds
+100%|██████████| 30/30 [00:27<00:00,  1.10it/s]
+Requested to load AutoencoderKL
+Loading 1 new model
+[Fooocus Model Management] Moving model(s) has taken 0.93 seconds
+Image generated with private log at: C:\Users\lannister\Desktop\IA\StabilityMatrix\Data\Packages\Fooocus\outputs\2024-01-30\log.html
+Generating and saving time: 30.53 seconds
+Requested to load SDXLClipModel
+Requested to load GPT2LMHeadModel
+Loading 2 new models
+[Fooocus Model Management] Moving model(s) has taken 0.47 seconds
+Total time: 32.67 seconds

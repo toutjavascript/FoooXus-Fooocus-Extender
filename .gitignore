@@ -1,0 +1,35 @@
+# .gitignore
+
+# Python
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# Directories
+.vscode
+.idea
+__pycache__
+*.egg-info
+dist
+build
+outputs
+output
+venv
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+foooxus.db
