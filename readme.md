@@ -15,7 +15,7 @@ You must install FoooXus on the same device than Fooocus.
 
 ```
 # Get the sources 
-git clone FoooXus-Fooocus-Extender
+git clone https://github.com/toutjavascript/FoooXus-Fooocus-Extender.git
 cd FoooXus-Fooocus-Extender
 
 # Activate the virtual python environment
