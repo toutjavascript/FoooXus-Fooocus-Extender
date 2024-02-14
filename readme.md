@@ -51,10 +51,15 @@ python foooxus.py
 
 Open your browser on http://127.0.0.1:7878 to view FoooXus UI
 
+## How to update FoooXus
+To update FoooXus from this github repository, open a terminal in your FoooXus-Fooocus-Extender 
+```
+git pull
+```
+
 ## Updates on Fooocus
 - Fooocus could be updated at every moment. It could broke the API.
 - FoooXus version is tested with V2.1.865 Fooocus Release.
-
 
 ## History Log
 V0.5 Very First release
