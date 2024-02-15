@@ -2,8 +2,10 @@ import os
 import shutil
 import traceback
 import timeit
+from datetime import datetime
 import pprint
 from src import utils
+from src import console
 from gradio_client import Client
 
 
@@ -33,15 +35,15 @@ class FooocusApi:
     
 
     # Ping Fooocus instance 
-    def pingFooocus(self):
-        print("py.pingFooocus() ")
+    def pingFooocus(self, firstCall=False):
         try:
             client=self.getClient();
             result = client.predict( fn_index=9 )
+            if firstCall:
+                console.printBB("[ok]FoooXus is connected to Fooocus. Let's play ![/ok]")
             return {"ajax":True, "error":False, "ping":True, "fooocusUrl": self.base_url}
         except Exception as e:
-            print("pingFooocus exception")
-            print(f"Error: {e}")
+            console.printExceptionError(e)
             return {"ajax":True, "error":True}
 
 
@@ -133,13 +135,15 @@ class FooocusApi:
 
 
     def sendCreateImage(self, metadata, uid):
-        print("  py.sendCreateImage() ")
-
         try:
             start_time = timeit.default_timer()
             self.initFooocus(metadata)
-            print("  waiting for predict() ")
-
+            now = datetime.now()
+            console.printBB("[hour]"+now.strftime("%H:%M:%S")+"[/hour] [b]#"+uid+"[/b] New generation asked and sent to Fooocus")
+            console.printBB("          [fade]Prompt:[/fade] "+metadata["Prompt"])
+            console.printBB("          [fade]Model:[/fade]  "+metadata["Base Model"])
+            console.printBB("          [fade]Styles:[/fade] "+"," .join(str(s) for s in metadata["Styles"]))
+      
             result = self.getClient().predict( 
                 metadata["Prompt"],	        # str in 'parameter_10' Textbox component
                 metadata["Negative Prompt"],# str in 'Negative Prompt' Textbox component
@@ -190,9 +194,6 @@ class FooocusApi:
                 fn_index=34
             )
 
-            print("type(result)")
-            print(type(result))
-            pprint.pprint(result)
 
             end_time = timeit.default_timer()
 
@@ -200,6 +201,7 @@ class FooocusApi:
 
             # Generation failure
             if len(result[3]['value'])==0:
+                console.printBB(" [b]#"+uid+"[/b] Generation image [error]failed[/error]")
                 return {
                     "ajax":True, 
                     "error":True, 
@@ -217,6 +219,9 @@ class FooocusApi:
 
             # Generation success
             if "name" in result[3]['value'][0]:  
+                now = datetime.now()
+                console.printBB("[hour]"+now.strftime("%H:%M:%S")+"[/hour] [b]#"+uid+"[/b] [ok]Image is generated[/ok]")
+
                 picture=result[3]['value'][0]['name']           
                 name=self.outputFolder+"/"+uid+result[3]['value'][0]['name'][-4:]
                 shutil.copy(picture, name)

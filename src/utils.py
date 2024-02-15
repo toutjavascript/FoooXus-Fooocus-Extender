@@ -1,6 +1,9 @@
 import os
 import glob
 from PIL import Image
+import importlib.metadata
+import sys
+import platform
 
 
 def formatBytes(B, round_to=2):
@@ -59,3 +62,57 @@ def getFiles(dir, extension):
     for i in range(len(files)):
         files[i] = files[i].replace(dir+'\\', "")
     return files
+
+
+def getPythonVersion():
+    if sys.version.find(" ")>1:
+        return sys.version[0:sys.version.find(" ")]
+    return sys.version
+
+def getOS():
+    os=platform.system()+" "+platform.release()
+    release=platform.release()
+    version=platform.version()
+    build=version
+    if os=="Windows 10":
+        build=version[version.rfind(".")+1:]
+        if (build>="22000"):
+            release="11"
+
+    return platform.system()+" "+release+" Build "+build
+
+
+def checkVersions(modules):
+    versions={}
+
+    for module in modules:
+        try:
+            versions[module]=importlib.metadata.version(module)
+        except:
+            versions[module]="ERROR"
+
+
+    return versions
+
+
+def getRequirements(file="requirements.txt", display=False):
+    requirements={}
+    
+    with open(file) as f:
+        lines = f.readlines()
+        for line in lines:
+            line=line.strip()
+            if line.find("==")>1:
+                name=line[0: line.find("==")].strip()
+                val=line[line.find("==")+2:].strip()
+            else:
+                name=line
+                val=""
+            requirements[name]=val
+        
+    if display:
+        print("Content of "+file)
+        for module in requirements:
+            print(" "+"{:<18}".format(module)+requirements[module])
+
+    return requirements

@@ -1,4 +1,6 @@
 # .gitignore
+config.json
+foooxus.db
 
 # Python
 *.py[cod]
@@ -22,6 +24,7 @@ build
 outputs
 output
 venv
+work
 
 # OS generated files
 .DS_Store
@@ -32,4 +35,3 @@ venv
 ehthumbs.db
 Thumbs.db
 
-foooxus.db

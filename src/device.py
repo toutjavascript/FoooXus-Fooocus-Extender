@@ -3,6 +3,7 @@ import cpuinfo
 import GPUtil
 import timeit
 import platform
+from src import console
 from src import utils
 
 
@@ -24,21 +25,38 @@ def getDeviceInfo():
     #print(f"Execution time psutil.virtual_memory(): {end_time - start_time} seconds")
         
     start_time = timeit.default_timer()
-    gpus = GPUtil.getGPUs()
-    gpu_info = [{'id': gpu.id, 
-                 'uuid': gpu.uuid, 
-                 'name': gpu.name, 
-                 'serial': gpu.serial, 
-                 'temperature': gpu.temperature, 
-                 'load': gpu.load, 
-                 'memoryTotal': gpu.memoryTotal, 
-                 'memoryUtil': gpu.memoryUtil,
-                 'memoryUsed': gpu.memoryUsed,
-                 'memoryFree': gpu.memoryFree,
-                 'display_mode': gpu.display_mode,
-                 'display_active': gpu.display_active
-                 } 
-                for gpu in gpus]
+    try:
+        gpus = GPUtil.getGPUs()
+        gpu_info = [{'id': gpu.id, 
+                    'uuid': gpu.uuid, 
+                    'name': gpu.name, 
+                    'serial': gpu.serial, 
+                    'temperature': gpu.temperature, 
+                    'load': gpu.load, 
+                    'memoryTotal': gpu.memoryTotal, 
+                    'memoryUtil': gpu.memoryUtil,
+                    'memoryUsed': gpu.memoryUsed,
+                    'memoryFree': gpu.memoryFree,
+                    'display_mode': gpu.display_mode,
+                    'display_active': gpu.display_active
+                    } 
+                    for gpu in gpus]
+    except:
+        gpu_info = [{
+            'id': "", 
+            'uuid': "", 
+            'name': "", 
+            'serial': "", 
+            'temperature': "", 
+            'load': "", 
+            'memoryTotal': 0, 
+            'memoryUtil': 0,
+            'memoryUsed': 0,
+            'memoryFree': 0,
+            'display_mode': "",
+            'display_active': ""}]
+        console.printBB("  GPUtil is ignored in this python version")
+
     end_time = timeit.default_timer()
     #print(f"Execution time GPUtil.getGPUs(): {end_time - start_time} seconds")
        

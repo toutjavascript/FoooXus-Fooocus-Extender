@@ -10,7 +10,7 @@ var app = {};
     app.models=[];
     app.loras=[];
     app.device=null;
-    app.config={};
+    app.config=false;
     app.jsons=[];           /* jsons that are prepared to send to API */
     app.calls=[];           /* jsons that are sent to API */
     app.activeCall=-1;        
@@ -23,7 +23,6 @@ var app = {};
         loras:[]
     }
     app.ratios=["1024×1024", "704×1408", "768×1280", "768×1344", "896×1152", "1408×704", "1280×768", "1344×768", "1152×896"];
-
 
 
 $( document ).ready(function() {
@@ -41,7 +40,8 @@ var metadataBase={
     "Guidance Scale":4,
     "Sharpness":2,
     "ADM Guidance":"(1.5, 0.8, 0.3)",
-    "Base Model":"cardosXL_v10.safetensors",
+    "Base Model":"juggernautXL_v8Rundiffusion.safetensors",
+    "Alternative Model":"",
     "Refiner Model":"None",
     "Refiner Switch":0.1,
     "Sampler":"dpmpp_2m_sde_gpu",
@@ -339,16 +339,29 @@ function makeAppLoras() {
         <br>`
         if (generates[i].length==0) {btn="";}
         let title=secure("Grid view of "+app.loras.length+" loras for the ["+preset.name+" - Prompt= "+preset.metadata.Prompt+"]");
+        /* Check if model exists in models list or replace it */
+        let htmlModel="";
+        let checkModel=checkModelExists(preset.metadata["Base Model"]);
+        if (checkModel===true) {
+            htmlModel=""+secure(preset.metadata["Base Model"].replace(".safetensors",""))
+        } else {
+            app.config["lora-illustrations"][i].metadata["Alternative Model"]=checkModel
+            htmlModel=`<span class="badge bg-warning">${secure(preset.metadata["Base Model"].replace(".safetensors",""))} not found</span><br>
+            ${secure(checkModel.replace(".safetensors",""))}`
+        }
+
+
         presets+=`            
         <td class="fs-13px" style="width: ${100/app.config["lora-illustrations"].length}%">
             <div class="text-center preset-name">
                 ${secure(preset.name)}
                 <button type="button" class="btn btn-sm btn-success display-inline m-1 p-0 px-1 fs-12px" onclick="gridViewIllustration('loras', '${secure(preset.name)}', 6, '${title}')">Grid view</button>
-
             </div>
             <div class="text-prompt">${secure(preset.metadata.Prompt)} </div>
             <div class="preset-param">Seed: ${secure(preset.metadata.Seed)} </div>
             <div class="preset-param">Styles: ${secure(preset.metadata.Styles.join(", "))} </div>
+            <div class="preset-param">${htmlModel} </div>
+            
             <div class="text-center">
                 ${btn}
                 <button type="button" class="btn btn-sm btn-danger display-inline m-1 p-0 px-1 fs-12px" onclick="generatePresetLoraIllustration(${i}, '${secure(preset.name)}', 'all')">Regenerate all illustrations</button>
@@ -385,7 +398,7 @@ function makeAppLoras() {
     `);
 
     $("div#app").append(form);
-    setTimeout(function() {madeEnlargeable()}, 100);
+    setTimeout(function() {madeImgEnlargeable()}, 100);
 
 }
 
@@ -522,7 +535,7 @@ function makeAppModels() {
 
     $("div#app").append(form);
 
-    setTimeout(function() {madeEnlargeable()}, 100);
+    setTimeout(function() {madeImgEnlargeable()}, 100);
 }
 
 /* Prepare the generation of preset style illustrations */ 
@@ -610,6 +623,17 @@ function makeAppStyles() {
         if (generates[i].length==0) {btn="";}
         let title=secure("Grid view of "+app.styles.length+" styles for the ["+preset.name+" - Prompt= "+preset.metadata.Prompt+"]");
 
+        /* Check if model exists in models list or replace it */
+        let htmlModel="";
+        let checkModel=checkModelExists(preset.metadata["Base Model"]);
+        if (checkModel===true) {
+            htmlModel=""+secure(preset.metadata["Base Model"].replace(".safetensors",""))
+        } else {
+            app.config["style-illustrations"][i].metadata["Alternative Model"]=checkModel           
+            htmlModel=`<span class="badge bg-warning">${secure(preset.metadata["Base Model"].replace(".safetensors",""))} not found</span><br>
+            ${secure(checkModel.replace(".safetensors",""))}`
+        }
+
         presets+=`            
             <td class="fs-13px" style="width: ${100/app.config["style-illustrations"].length}%">                    
                     <div class="text-center preset-name">${secure(preset.name)} 
@@ -617,7 +641,7 @@ function makeAppStyles() {
                     </div>
                 <div class="text-prompt">${secure(preset.metadata.Prompt)} </div>
                 <div class="preset-param">Seed: ${secure(preset.metadata.Seed)} </div>
-                <div  class="preset-param">Model: ${secure(preset.metadata["Base Model"].replace(".safetensors",""))} </div>
+                <div  class="preset-param">${htmlModel} </div>
                 <div class="text-center">
                     ${btn}
                     <button type="button" class="btn btn-sm btn-danger display-inline m-1 p-0 px-1 fs-12px" onclick="generatePresetStyleIllustration(${i}, '${secure(preset.name)}', 'all')">Regenerate all</button>
@@ -657,7 +681,7 @@ function makeAppStyles() {
     `);
 
     $("div#app").append(form);
-    setTimeout(function() {madeEnlargeable()}, 100);
+    setTimeout(function() {madeImgEnlargeable()}, 100);
 
 }
 
@@ -749,7 +773,7 @@ function gridViewIllustration(items, name, cols=5, desc="") {
         fixed: true,
     }).open();
 
-    setTimeout(function() {madeEnlargeable(), 200})
+    setTimeout(function() {madeImgEnlargeable(), 200})
 }
 
 
@@ -821,7 +845,7 @@ function makeAppAPI() {
 
     activateMenu("menu-api");
 
-    let work=false;
+    let work=!false;
 
     if (!work) {
 
@@ -851,11 +875,11 @@ function makeAppAPI() {
         `
     }
 
-    let selectRatio=`<select name="ratio" id="ratio"  class="form-control"  onchange="resetProcess()">`;
+    let selectRatio=`<select name="ratio" id="ratio"  class="form-select"  onchange="resetProcess()">`;
     for (let i=0; i<app.ratios.length; i++) selectRatio+=`<option value="${app.ratios[i]}">${app.ratios[i]}</option>`;
     selectRatio+=`</select>`;
 
-    let selectStyle="";
+    let selectStyle="", selectRefiner="", selectModel="";
 
     form.html(`
     <div class="container p-0 m-0">
@@ -893,21 +917,55 @@ function makeAppAPI() {
                 <div class="mb-1">
                     <label for="styles" class="form-label">Styles</label>
                     ${selectStyle}
-                    <div class="form-text">Choose one or more styles.</div>
+                    <div class="form-text">Choose style.</div>
+                </div>
+                <div class="mb-1">
+                    <label for="refiner" class="form-label">Refiner</label>
+                    ${selectRefiner}
+                    <div class="form-text">Choose style.</div>
+                </div>
+                <div class="mb-1">
+                    <label for="refinerSwitch" class="form-label">Refiner Switch</label>
+                    <input type="text" class="form-control" id="refinerSwitch" name="refinerSwitch" onchange="resetProcess()">
+                    <div class="form-text">Intensity of refiner.</div>
                 </div>
 
 
                 <div class="mb-1">
-                    <label for="guidance" class="form-label">Guidance Scale</label>
+                    
+                    <div class="row justify-content-between">
+                        <div class="col-auto">
+                            <label for="guidance" class="form-label">Guidance Scale </label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="checkbox" name="guidance-variation" id="guidance-variation" value="0"> <label for="guidance-variation" class="form-label">Generate variations</label>
+                        </div>
+                    </div>
+
                     <input type="text" class="form-control" id="guidance" name="guidance" onchange="resetProcess()">
                     <div class="form-text">Higher value means style is cleaner, vivider, and more artistic.</div>
                 </div>
 
                 <div class="mb-1">
                     <label for="sharpness" class="form-label">Image Sharpness</label>
-                    <input type="range" id="range_id_sharpness" name="cowbell" min="0" max="30" step="0.0001" class="form-control">
                     <input type="text" class="form-control" id="sharpness" name="sharpness" onchange="resetProcess()">
                     <div class="form-text">Higher value means image and texture are sharper.</div>
+                </div>
+
+                <div class="mb-1">
+                    <label for="positive" class="form-label">Positive ADM</label>
+                    <input type="text" class="form-control" id="positive" name="positive" onchange="resetProcess()">
+                    <div class="form-text">Positive ADM Guidance Scaler.</div>
+                </div>
+                <div class="mb-1">
+                    <label for="negative" class="form-label">Negative ADM</label>
+                    <input type="text" class="form-control" id="negative" name="negative" onchange="resetProcess()">
+                    <div class="form-text">Negative ADM Guidance Scaler.</div>
+                </div>
+                <div class="mb-1">
+                    <label for="step" class="form-label">End Step ADM</label>
+                    <input type="text" class="form-control" id="step" name="step" onchange="resetProcess()">
+                    <div class="form-text">ADM Guidance End At Step.</div>
                 </div>
 
 
@@ -1002,15 +1060,7 @@ function process(f) {
 }
 
 
-function generateUID(i) {
-    var d = new Date().getTime();
-    var uid = 'xyxyxyxyxyxyxyxy'.replace(/[xy]/g, function(c) {
-        var r = (d + i*1000 + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
-    });
-    return uid;
-}
+
 
 /* Add the app.jsons to app.calls and launch the generation if necessary */
 function launchGeneration(callback=function() {}, error=function() {}) {
@@ -1023,12 +1073,15 @@ function launchGeneration(callback=function() {}, error=function() {}) {
     console.log("launchGeneration() called")
 
     for (let i=0; i<jsons.length; i++) {
-        let uuid = generateUID(i);
+        let uuid = generateUID(i+jsons[i].toString());
+        if (jsons[i]["Alternative Model"]!="") jsons[i]["Base Model"]=jsons[i]["Alternative Model"]
         app.calls.push(new Call(jsons[i], uuid));
     }
 
     if (app.activeCall==-1) {
         app.activeCall=0;
+    }
+    if (!app.generating) {
         sendActiveCall(callback, error);
     }
 
@@ -1058,7 +1111,7 @@ function sendActiveCall(callback=function() {}, error=function() {}) {
         success: function (data) {
             console.log("generateImage loaded")
             console.log(data)   
-            if ((data.ajax)&&(!data.error)) {
+            if ((data.ajax)&&(!data.error)&&(data.image)) {
                 console.log("generateImage OK")
                 app.calls[app.activeCall].image=data.image;
                 app.calls[app.activeCall].endTime=performance.now();
@@ -1080,6 +1133,10 @@ function sendActiveCall(callback=function() {}, error=function() {}) {
                 app.calls[app.activeCall].status=false;
                 app.generating=false
                 app.activeCall++;
+                new jBox('Notice', {
+                    content: "One image was not generated: Error in Fooocus",
+                    color:"red"
+                });
                 if (app.activeCall<app.calls.length) {
                     sendActiveCall(callback, error);
                 } 
@@ -1121,7 +1178,17 @@ class Batch {
     }
 }
 
+/* Check if model exists in Fooocus install folder */
+function checkModelExists(model) {
+    if (app.models.includes(model)) return true;
 
+    let possibilities=["juggernautXL_v8Rundiffusion.safetensors", "juggernautXL_version6Rundiffusion.safetensors", app.models[0]]
+    for (let i=0; i< possibilities.length; i++) {
+        if (app.models.includes(possibilities[i])) return possibilities[i];
+    }
+
+    return newModel
+}
 
 /* Update the initial display of the app */
 function showDeviceInfo() {
@@ -1135,8 +1202,10 @@ function showDeviceInfo() {
     let ram=formatBytes(app.device.ram_installed, 0);
     let gpu="Unknown";
     if (app.device.gpus.length>0) { 
-        gpu=app.device.gpus[0].name.replace("NVIDIA GeForce", "").replace("AMD Radeon", "").trim(); 
-        gpu+=" ("+formatBytes(app.device.gpus[0].memoryTotal*1024*1024, 1)+")";
+        if (app.device.gpus[0].name!="") {
+            gpu=app.device.gpus[0].name.replace("NVIDIA GeForce", "").replace("AMD Radeon", "").trim(); 
+            gpu+=" ("+formatBytes(app.device.gpus[0].memoryTotal*1024*1024, 1)+")";
+        }
     }
     let hardware=`
     <i class="bi bi-cpu-fill"></i> ${secure(cpu)} <br>
@@ -1155,7 +1224,7 @@ function makeAppHelp() {
     $("div#help").show().removeClass("d-none");
 }
 
-
+/* Update display makeAppQueue */
 function updateQueue() {
     if (app.activeMenu=="menu-queue") {
         /* Save vertical scroll position */
@@ -1291,6 +1360,8 @@ function updateStep(step) {
     if (step==5) {
         $("#label-step").html("FoooXus App Ready: it is your turn !");
 
+        $("#aboutApp").html("FoooXus V"+app.config.FOOOXUS_RELEASE+" - Python "+app.config.versions.python+" running on "+app.config.versions.OS)
+
         setInterval(function() {
             updateHeader();
             updateQueue();
@@ -1351,7 +1422,7 @@ function pingFoooxus(callback=function() {}, error=function() {}) {
         method: "POST",
         success: function (data) {
             if (data.ping) {
-                app.config=data.config;
+                if (app.config===false) app.config=data.config;
                 app.lastPingFoooxusOk = now();
                 app.nbPingFoooxus++;
                 callback();
@@ -1503,7 +1574,7 @@ function getIllustrations(callback=function() {}, error=function() {}) {
 }
 
 /* Add Zoom image on click */
-function madeEnlargeable(mode="illustration") {
+function madeImgEnlargeable(mode="illustration") {
     $('img.img-enlargeable').removeClass("img-enlargeable").addClass('img-enlargeabled').css('cursor', 'zoom-in').on('mouseover', function(e) {
         clicktoenlarge=$('<div>').css({
           position: 'absolute',
@@ -1536,7 +1607,6 @@ function madeEnlargeable(mode="illustration") {
             left: left, 
             opacity:0
           }, 200, function() {
-            console.log('animation over');
             modal.remove();
           });
           $('body').off('keyup.modal-close');
@@ -1561,7 +1631,6 @@ function madeEnlargeable(mode="illustration") {
           left:0,
           opacity: 1
         }, 200, function() {
-          console.log('animation over');
         });
         var info=$('<div>').css({
             display: 'none',

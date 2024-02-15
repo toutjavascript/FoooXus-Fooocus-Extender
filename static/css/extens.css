@@ -6,6 +6,11 @@ code {
     font-weight: bold;
 }
 
+.form-text {
+    margin:0px;
+    margin-bottom:2px;
+}
+
 body, label, div, input, select, textarea, button, span, a, button {
     font-size:15px;
 }
@@ -224,4 +229,12 @@ td.work-delay {
     font-weight: bold;
     background-color: #333;
     padding: 1px;
+}
+
+/* About */
+p#aboutApp {
+    font-size:12px;
+    font-weight: bold;
+    color:#666;
+    margin-top:12px;
 }

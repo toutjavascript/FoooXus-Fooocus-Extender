@@ -1,22 +1,74 @@
+# https://github.com/toutjavascript/FoooXus-Fooocus-Extender
+
+
+
 import json
 import os
 import html
-import timeit
+import sys
+import shutil
 from gradio_client import Client
 from src import api
 from src import device
 from src import utils
 from src import sql
+from src import console
 from src.models import DeviceInfo, Metadata, Image
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+import logging
+
+FOOOXUS_RELEASE="0.6"
+
+
+
+
+# Check versions of module versus requirements.txt
+def checkVersions(requirements):
+    versions=utils.checkVersions(requirements)
+    pythonVersion=utils.getPythonVersion()
+    OS=utils.getOS()
+
+    require=True
+
+    console.printBB("You are running [b]Python V"+pythonVersion+"[/b] on [b]"+OS+"[/b]")
+
+    console.printBB("FoooXus ckecks installed module versions and compares them to requirements.txt")
+    console.printBB("  [b]Modules            Requirement       Installed version[/b]")
+
+    for module in requirements:
+        if versions[module]==requirements[module]:
+            version="[ok]✔ "+versions[module]+"[/ok]"
+        else:
+            version="[error]X "+versions[module]+"[/error]"
+            require=False
+           
+        console.printBB("  [b]{:<19}".format(module)+"[/b]{:<18}".format(requirements[module])+version)
+
+    if require:
+        console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
+    else:
+        console.printBB(" [error]One requirement is not met. Foooxus could fail[/error]")
+    print("")
+
+    versions["OS"]=OS
+    versions["python"]=pythonVersion
+    return versions
 
 
 # Load configuration from config.json FoooXus
 def loadConfig():
+
+    requirements=utils.getRequirements("requirements.txt")
+
+    versions=checkVersions(requirements)
+
     with open('config.json') as config_file:
         conf = json.load(config_file)
     conf["illustrationsFolder"]="outputs/illustrations"
     conf["outputsFolder"]="outputs"
+    conf["versions"]=versions
+    conf["requirements"]=requirements
+    conf["FOOOXUS_RELEASE"]=FOOOXUS_RELEASE
 
     # check if outputs folder exists
     utils.checkFolder(conf["outputsFolder"])
@@ -24,6 +76,8 @@ def loadConfig():
     utils.checkFolder(conf["illustrationsFolder"]+"/models")
     utils.checkFolder(conf["illustrationsFolder"]+"/styles")
     utils.checkFolder(conf["illustrationsFolder"]+"/loras")
+
+    conf["init"]=True  # flag to tell no api call is made yet
 
     # check if database exists
     # sql.connect()
@@ -52,11 +106,57 @@ def loadFooocusConfig(dir):
 
 
 
+def checkInit():
+    # Check if config.json not exists: run initialization
+    if os.path.exists("./config.json")==False:
+        console.printBB("[reverse][h1]****************************    FIRST INIT of FoooXuS APP V"+FOOOXUS_RELEASE+"   ****************************[/h1][/reverse]")
+        console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
+        console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
+
+        shutil.copy2("./templates/config.tpl", "config.json")
+
+        console.printBB("")
+        console.printBB("A new config.json has been created. Fill in these values :")
+        console.printBB('"[b]fooocus-directory[/b]": "[b]C:\\Users\\lannister\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus[/b]"')
+        console.printBB('"[b]fooocus-address[/b]": "[b]127.0.0.1:7865[/b]"')
+        console.printBB("")
+        console.printBB("Once check, restart [hour]python foooxus.py[/hour] here")
+        console.printBB("")
+
+
+        sys.exit("")
+
+
+# STARTING FOOOXUS APP
+
+
+
+checkInit()
+
+
+console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse]")
+console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
+console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
+
+
 conf=loadConfig()
 
 
 
 app = Flask(__name__)
+# Prevent http logging in terminal 
+log = logging.getLogger('werkzeug')
+log.disabled = True
+
+
+console.printBB("[ok]Now, open FoooXus web UI on [u]http://"+conf["host"]+":"+str(conf["port"])+"[/u][/ok]")
+console.printBB("")
+
+
+
+
+
+
 myApi = api.FooocusApi(conf['fooocus-address']+"")
 
 
@@ -80,7 +180,8 @@ def getDeviceInfo():
 
 @app.route('/ajax/pingFooocus', methods=['POST'])
 def pingFooocus():
-    ping=myApi.pingFooocus()
+    ping=myApi.pingFooocus(conf["init"])
+    conf["init"]=False
     return ping
 
 @app.route('/ajax/getModels', methods=['POST'])
@@ -114,11 +215,7 @@ def getIllustrations():
 @app.route('/ajax/generateImage', methods=['POST'])
 def generateImage():
     uid = request.form.get('uid', '') 
-    print("uid = "+uid)
     metadata = json.loads(request.form.get('metadata', ''))
-
-    print("typeof(metadata) = ", type(metadata))
-    print("metadata = ",metadata)
     result=myApi.sendCreateImage(metadata, uid)
     return result
 
