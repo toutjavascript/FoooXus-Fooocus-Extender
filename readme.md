@@ -28,26 +28,33 @@ venv\Scripts\activate
 # Install requirements
 pip install -r requirements.txt
 
-# Edit the config.json file  
-# Fll in the fooocus install directory
-# Check the fooocus address
-    "host": "127.0.0.1",        
-    "port": 7878,
-    "fooocus-directory": "C:\\Users\\lannister\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus",
-    "fooocus-address": "127.0.0.1:7865",
+# First run of the FoooXus app to initialize
+python foooxus.py
 ```
-FoooXus is now ready to start.
 
-## How to use
+Terminal will show this kind of message
+![Init of app](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/1c16d3e7-b0af-48cf-920c-2a04c893ef01)
+
+Fill in the fields in config.json file
+
+FoooXus is now ready to start with a new call to
+```
+python foooxus.py
+```
+
+
+## How to use every day
 ```
 # Check you are in your (venv) virtual environment
 # if not, activate it
-python -m venv venv
 venv\Scripts\activate
 
 # Run the FoooXus app
 python foooxus.py
 ```
+
+Terminal shows now versions and much more informations to understand what happens
+![FoooXus starts](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/2eda20a1-3f10-46a9-b5bc-531674226d28)
 
 Open your browser on http://127.0.0.1:7878 to view FoooXus UI
 
@@ -62,6 +69,9 @@ git pull
 - FoooXus version is tested with V2.1.865 Fooocus Release.
 
 ## History Log
+V0.6 Updates on install process
+- If you have issues, please tell me, with a copy of a terminal
+
 V0.5 Very First release
 - Please, tell me if it is broken somewhere
 - Please, share your ideas by opening new discussions
@@ -72,3 +82,6 @@ Get notified when new image is generated
 
 View history 
 ![Queue and history](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/e82f3b8b-db2c-41b4-9f21-29fb315960e5)
+
+Python terminal shows all generations
+![Terminal shows generation log](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/3d9190f8-e730-4893-8e9f-dda637419778)
