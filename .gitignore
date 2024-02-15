@@ -15,7 +15,7 @@ dist
 build
 
 # Directories
-.vscode
+.vscodepython foooxus.py
 .idea
 __pycache__
 *.egg-info

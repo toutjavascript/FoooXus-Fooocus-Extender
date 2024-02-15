@@ -845,7 +845,7 @@ function makeAppAPI() {
 
     activateMenu("menu-api");
 
-    let work=!false;
+    let work=false;
 
     if (!work) {
 
