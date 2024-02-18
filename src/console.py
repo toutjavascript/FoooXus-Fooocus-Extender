@@ -21,6 +21,7 @@ def printBB(text):
     text=re.sub(r"(\[reverse\])(.+)(\[/reverse\])","\033[7m\\2\033[0m",text,re.IGNORECASE)
     text=re.sub(r"(\[header\])([^\[\]]+)(\[/header\])","\\033[1m \\2\033[0m",text,re.IGNORECASE)
     text=re.sub(r"(\[hour\])([^\[\]]+)(\[/hour\])","\\033[48;5;255m\\2\033[0m",text,re.IGNORECASE)
+    text=re.sub(r"(\[shell\])([^\[\]]+)(\[/shell\])","\\033[44;1;97m\\2\033[0m",text,re.IGNORECASE)
     print(text)
 
 
@@ -28,7 +29,7 @@ def printExceptionError(error):
     caller_name = inspect.stack()[1].function
     file=inspect.stack()[1].filename
     file=file[file.rfind("\\")+1:]
-    printBB("[error]Exception Error on [b]"+file+"/"+caller_name+"()[/b]: "+repr(error)+"[/error]")
+    printBB("[error]Exception Error on "+file+"/"+caller_name+"(): "+repr(error)+"[/error]")
 
 # From this great tuto https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
 def test():

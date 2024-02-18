@@ -262,8 +262,8 @@ function generatePresetLoraIllustration(numPreset, name, loras=[]) {
         let json=JSON.parse(JSON.stringify(Object.assign(metadataBase, app.config["lora-illustrations"][numPreset].metadata)));
         jsons[i]=json;
         jsons[i]["action"]={
-            "resize": [512, 512],
-            "compress": 80,
+            "resize": app.config.illustrationResizeSizes,
+            "compress": app.config.illustrationResizeCompress,
             "copy": app.illustrationsFolder+"/loras/"+secureFile(lora.replace(".safetensors", ""))+"_"+secureFile(name)+".jpg"
         }
         jsons[i]["Lora 1"]=lora;
@@ -419,8 +419,8 @@ function generatePresetModelIllustration(numPreset, name, models=[]) {
         let json=JSON.parse(JSON.stringify(Object.assign(metadataBase, app.config["model-illustrations"][numPreset].metadata)));
         jsons[i]=json;
         jsons[i]["action"]={
-            "resize": [512, 512],
-            "compress": 80,
+            "resize": app.config.illustrationResizeSizes,
+            "compress": app.config.illustrationResizeCompress,
             "copy": app.illustrationsFolder+"/models/"+secureFile(model.replace(".safetensors", ""))+"_"+secureFile(name)+".jpg"
         }
         jsons[i]["Base Model"]=model;
@@ -553,8 +553,8 @@ function generatePresetStyleIllustration(numPreset, name, styles=[]) {
         let json=JSON.parse(JSON.stringify(Object.assign(metadataBase, app.config["style-illustrations"][numPreset].metadata)));
         jsons[i]=json;
         jsons[i]["action"]={
-            "resize": [512, 512],
-            "compress": 80,
+            "resize": app.config.illustrationResizeSizes,
+            "compress": app.config.illustrationResizeCompress,
             "copy": app.illustrationsFolder+"/styles/"+secureFile(style)+"_"+secureFile(name)+".jpg"
         }
         jsons[i]["Styles"]=[style];
@@ -1359,8 +1359,11 @@ function updateStep(step) {
     if (step>=4) { displayConnections() }
     if (step==5) {
         $("#label-step").html("FoooXus App Ready: it is your turn !");
-
-        $("#aboutApp").html("FoooXus V"+app.config.FOOOXUS_RELEASE+" - Python "+app.config.versions.python+" running on "+app.config.versions.OS)
+        if (app.config.versions.PyInstaller) {
+            $("#aboutApp").html("FoooXus V"+app.config.FOOOXUS_RELEASE+" standalone foooxus.exe on "+app.config.versions.OS)
+        } else {
+            $("#aboutApp").html("FoooXus V"+app.config.FOOOXUS_RELEASE+" - Python "+app.config.versions.python+" running on "+app.config.versions.OS)
+        }
 
         setInterval(function() {
             updateHeader();

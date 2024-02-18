@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap-icons.min.css') }}/">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/jBox.all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/jBox.TooltipDark.min.css') }}">
-    <script src="{{ url_for('static', filename= 'js/utils.js') }}"></script>
-    <script src="{{ url_for('static', filename= 'js/extens.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/extens.css') }}">
+    <script src="{{ url_for('static', filename= 'js/utils.js') }}?{{ release }}"></script>
+    <script src="{{ url_for('static', filename= 'js/extens.js') }}?{{ release }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/extens.css') }}?{{ release }}">
     <title>FoooXus: Fooocus Extender</title>
 </head>
 <body>

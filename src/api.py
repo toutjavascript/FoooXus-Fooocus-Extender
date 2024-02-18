@@ -3,7 +3,7 @@ import shutil
 import traceback
 import timeit
 from datetime import datetime
-import pprint
+import sys
 from src import utils
 from src import console
 from gradio_client import Client
@@ -37,12 +37,15 @@ class FooocusApi:
     # Ping Fooocus instance 
     def pingFooocus(self, firstCall=False):
         try:
-            client=self.getClient();
+            client=self.getClient()
             result = client.predict( fn_index=9 )
             if firstCall:
-                console.printBB("[ok]FoooXus is connected to Fooocus. Let's play ![/ok]")
+                console.printBB("[ok]FoooXus is connected to Fooocus. Let's play in the web UI ![/ok]")
             return {"ajax":True, "error":False, "ping":True, "fooocusUrl": self.base_url}
         except Exception as e:
+            console.printBB("[error]FoooXus not connected to Fooocus gradio API :([/error]")
+            console.printBB("[error] It could be because Fooocus changes version...[/error]")
+
             console.printExceptionError(e)
             return {"ajax":True, "error":True}
 
@@ -224,14 +227,20 @@ class FooocusApi:
 
                 picture=result[3]['value'][0]['name']           
                 name=self.outputFolder+"/"+uid+result[3]['value'][0]['name'][-4:]
-                shutil.copy(picture, name)
+                shutil.copyfile(picture, name)
 
                 if "action" in metadata:
                     if "compress" in metadata["action"]:
                         if "resize" in metadata["action"]:
                             if "copy" in metadata["action"]:
-                               w, h=metadata["action"]["resize"]
-                               utils.resizeAndCompressImage(picture, w, h, metadata["action"]["compress"], metadata["action"]["copy"])
+                                w, h=metadata["action"]["resize"]
+                                # dirname = os.path.dirname(sys.argv[0])
+                                # filename = utils.pathJoin(dirname, metadata["action"]["copy"])
+                                # print("Remove file ? "+filename)
+                                # if os.path.exists(filename):  
+                                #     print("REMOVE FILE:  "+filename)
+                                #    os.remove(filename)
+                                utils.resizeAndCompressImage(picture, w, h, metadata["action"]["compress"], metadata["action"]["copy"])
 
             image={ "ajax": True,
                     "error": False,

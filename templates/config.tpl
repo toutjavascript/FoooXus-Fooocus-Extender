@@ -3,6 +3,8 @@
     "port": 7878,
     "fooocus-directory": "C:\\Users\\lannister\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus",
     "fooocus-address": "127.0.0.1:7865",
+    "illustrationResizeSizes": [512, 512],  
+    "illustrationResizeCompress": 80,      
     "style-illustrations":[
         {
             "name": "s1",
@@ -54,7 +56,7 @@
             "description": "Illustration #6 for all styles, Portrait of a girl",
             "metadata": {
                 "Base Model": "juggernautXL_v8Rundiffusion.safetensors",
-                "Prompt": "Portrait of a girl at a party",
+                "Prompt": "Portrait of a young woman at a party",
                 "Seed": "314159"
             }           
         }

@@ -1,3 +1,4 @@
+# Made by toutjavascript.com
 # https://github.com/toutjavascript/FoooXus-Fooocus-Extender
 
 
@@ -16,9 +17,22 @@ from src import console
 from src.models import DeviceInfo, Metadata, Image
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import logging
+import argparse
 
-FOOOXUS_RELEASE="0.6"
 
+# Constants to identify version and execution modalities
+FOOOXUS_RELEASE="0.8"
+FOOOXUS_PYTHON=True
+FOOOXUS_EXE=False
+
+
+argParser = argparse.ArgumentParser(description="FoooXus args")
+argParser.add_argument("-PyInstaller", "--PyInstaller", help="FoooXus PyInstaller running")
+args = argParser.parse_args()
+if (args.PyInstaller=="PyInstaller"):
+    FOOOXUS_PYINSTALLER=True
+else:
+    FOOOXUS_PYINSTALLER=False
 
 
 
@@ -30,9 +44,17 @@ def checkVersions(requirements):
 
     require=True
 
-    console.printBB("You are running [b]Python V"+pythonVersion+"[/b] on [b]"+OS+"[/b]")
+    if FOOOXUS_PYINSTALLER:
+        console.printBB("You are running the [b]standalone foooxus.exe[/b] on [b]"+OS+"[/b]")
+        console.printBB("FoooXus ckecks included module versions and compares them to requirements.txt")
+    else:
+        console.printBB("You are running [b]Python V"+pythonVersion+"[/b] on [b]"+OS+"[/b]")
+        if utils.in_venv():
+            console.printBB(" [ok] (venv) is activated[/ok]")
+        else:
+            console.printBB(" [error] Carefull, (venv) is not activated. You may experience module version issues[/error]")
+        console.printBB("FoooXus ckecks installed module versions and compares them to requirements.txt")
 
-    console.printBB("FoooXus ckecks installed module versions and compares them to requirements.txt")
     console.printBB("  [b]Modules            Requirement       Installed version[/b]")
 
     for module in requirements:
@@ -47,11 +69,13 @@ def checkVersions(requirements):
     if require:
         console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
     else:
-        console.printBB(" [error]One requirement is not met. Foooxus could fail[/error]")
+        console.printBB(" [error]One requirement is not met. FoooXus could fail[/error]")
     print("")
 
     versions["OS"]=OS
     versions["python"]=pythonVersion
+    versions["pyInstaller"]=FOOOXUS_PYINSTALLER
+
     return versions
 
 
@@ -64,6 +88,11 @@ def loadConfig():
 
     with open('config.json') as config_file:
         conf = json.load(config_file)
+    if "illustrationResizeSizes" not in conf:
+       conf["illustrationResizeSizes"]=[512, 512]
+    if "illustrationResizeCompress" not in conf:
+       conf["illustrationResizeCompress"]=80
+     
     conf["illustrationsFolder"]="outputs/illustrations"
     conf["outputsFolder"]="outputs"
     conf["versions"]=versions
@@ -109,7 +138,7 @@ def loadFooocusConfig(dir):
 def checkInit():
     # Check if config.json not exists: run initialization
     if os.path.exists("./config.json")==False:
-        console.printBB("[reverse][h1]****************************    FIRST INIT of FoooXuS APP V"+FOOOXUS_RELEASE+"   ****************************[/h1][/reverse]")
+        console.printBB("[reverse][h1]*************************   FIRST INIT of FoooXuS APP V"+FOOOXUS_RELEASE+"   *************************[/h1][/reverse]")
         console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
         console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
 
@@ -117,10 +146,10 @@ def checkInit():
 
         console.printBB("")
         console.printBB("A new config.json has been created. Fill in these values :")
-        console.printBB('"[b]fooocus-directory[/b]": "[b]C:\\Users\\lannister\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus[/b]"')
+        console.printBB('"[b]fooocus-directory[/b]": "[b]C:\\Users\\TJS\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus[/b]"')
         console.printBB('"[b]fooocus-address[/b]": "[b]127.0.0.1:7865[/b]"')
         console.printBB("")
-        console.printBB("Once check, restart [hour]python foooxus.py[/hour] here")
+        console.printBB("Once checked, restart [shell]python foooxus.py[/shell] "+("or [shell]foooxus.bat[/shell] here" if utils.is_windows() else ""))
         console.printBB("")
 
 
@@ -128,118 +157,112 @@ def checkInit():
 
 
 # STARTING FOOOXUS APP
-
-
-
-checkInit()
-
-
-console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse]")
-console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
-console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
-
-
-conf=loadConfig()
-
-
-
-app = Flask(__name__)
-# Prevent http logging in terminal 
-log = logging.getLogger('werkzeug')
-log.disabled = True
-
-
-console.printBB("[ok]Now, open FoooXus web UI on [u]http://"+conf["host"]+":"+str(conf["port"])+"[/u][/ok]")
-console.printBB("")
-
-
-
-
-
-
-myApi = api.FooocusApi(conf['fooocus-address']+"")
-
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
-
-@app.route('/ajax/pingFoooxus', methods=['POST'])
-def pingFoooxus():
-    return {"ajax":True, "ping": True, "config": conf}
-
-
-
-@app.route('/ajax/getDeviceInfo', methods=['POST'])
-def getDeviceInfo():
-    deviceInfo=device.getDeviceInfo()
-    return deviceInfo
-
-
-@app.route('/ajax/pingFooocus', methods=['POST'])
-def pingFooocus():
-    ping=myApi.pingFooocus(conf["init"])
-    conf["init"]=False
-    return ping
-
-@app.route('/ajax/getModels', methods=['POST'])
-def getModels():
-    models=myApi.getModels()
-    return json.dumps(models)
-
-@app.route('/ajax/getStyles', methods=['POST'])
-def getStyles():
-    models=myApi.getStyles()
-    return json.dumps(models)
-
-@app.route('/ajax/getLoras', methods=['POST'])
-def getLoras():
-    loras=myApi.getLoras(conf["loras-directory"])
-    return json.dumps(loras)
-
-@app.route('/ajax/getConfig', methods=['POST'])
-def getConfig():
-    conf["ajax"]=True
-    return conf
-
-@app.route('/ajax/getIllustrations', methods=['POST'])
-def getIllustrations():
-    result={"illustrations":{}}
-    result["illustrations"]["models"]=utils.getFiles(conf["illustrationsFolder"]+"/models", "jpg")
-    result["illustrations"]["styles"]=utils.getFiles(conf["illustrationsFolder"]+"/styles", "jpg")
-    result["illustrations"]["loras"]=utils.getFiles(conf["illustrationsFolder"]+"/loras", "jpg")
-    return json.dumps(result)
-
-@app.route('/ajax/generateImage', methods=['POST'])
-def generateImage():
-    uid = request.form.get('uid', '') 
-    metadata = json.loads(request.form.get('metadata', ''))
-    result=myApi.sendCreateImage(metadata, uid)
-    return result
-
-
-
-@app.route('/'+conf["illustrationsFolder"]+'/models/<filename>', methods=['GET'])
-def serveImageModel(filename):
-    return send_from_directory(conf["illustrationsFolder"]+"/models/", filename)
-
-@app.route('/'+conf["illustrationsFolder"]+'/styles/<filename>', methods=['GET'])
-def serveImageStyle(filename):
-    return send_from_directory(conf["illustrationsFolder"]+"/styles/", filename)
-
-@app.route('/'+conf["illustrationsFolder"]+'/loras/<filename>', methods=['GET'])
-def serveImageLoral(filename):
-    return send_from_directory(conf["illustrationsFolder"]+"/loras/", filename)
-
-@app.route('/'+conf["outputsFolder"]+'/tmp/<filename>', methods=['GET'])
-def serveImage(filename):
-    return send_from_directory(conf["outputsFolder"]+"/tmp", filename)
-
-@app.route('/favicon.ico', methods=['GET'])
-def serveFavicon():
-    return send_from_directory(os.path.join(app.root_path, 'static/picto'), 'favicon.ico',mimetype='image/vnd.microsoft.icon')
-
 if __name__ == '__main__':
-    app.run(host=conf['host'], port=conf['port'])
+    try:
+        checkInit()
+
+        console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse]")
+        console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
+        console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
+
+        conf=loadConfig()
+
+        app = Flask(__name__)
+        # Prevent http logging in terminal 
+        log = logging.getLogger('werkzeug')
+        log.disabled = True
+
+
+        console.printBB("[ok]Now, open FoooXus web UI on [u]http://"+conf["host"]+":"+str(conf["port"])+"[/u][/ok]")
+        console.printBB("")
+
+        myApi = api.FooocusApi(conf['fooocus-address']+"")
+
+
+        @app.route('/')
+        def home():
+            return render_template('index.html', release=FOOOXUS_RELEASE)
+
+
+
+        @app.route('/ajax/pingFoooxus', methods=['POST'])
+        def pingFoooxus():
+            return {"ajax":True, "ping": True, "config": conf}
+
+
+
+        @app.route('/ajax/getDeviceInfo', methods=['POST'])
+        def getDeviceInfo():
+            deviceInfo=device.getDeviceInfo()
+            return deviceInfo
+
+
+        @app.route('/ajax/pingFooocus', methods=['POST'])
+        def pingFooocus():
+            ping=myApi.pingFooocus(conf["init"])
+            conf["init"]=False
+            return ping
+
+        @app.route('/ajax/getModels', methods=['POST'])
+        def getModels():
+            models=myApi.getModels()
+            return json.dumps(models)
+
+        @app.route('/ajax/getStyles', methods=['POST'])
+        def getStyles():
+            models=myApi.getStyles()
+            return json.dumps(models)
+
+        @app.route('/ajax/getLoras', methods=['POST'])
+        def getLoras():
+            loras=myApi.getLoras(conf["loras-directory"])
+            return json.dumps(loras)
+
+        @app.route('/ajax/getConfig', methods=['POST'])
+        def getConfig():
+            conf["ajax"]=True
+            return conf
+
+        @app.route('/ajax/getIllustrations', methods=['POST'])
+        def getIllustrations():
+            result={"illustrations":{}}
+            result["illustrations"]["models"]=utils.getFiles(conf["illustrationsFolder"]+"/models", "jpg")
+            result["illustrations"]["styles"]=utils.getFiles(conf["illustrationsFolder"]+"/styles", "jpg")
+            result["illustrations"]["loras"]=utils.getFiles(conf["illustrationsFolder"]+"/loras", "jpg")
+            return json.dumps(result)
+
+        @app.route('/ajax/generateImage', methods=['POST'])
+        def generateImage():
+            uid = request.form.get('uid', '') 
+            metadata = json.loads(request.form.get('metadata', ''))
+            result=myApi.sendCreateImage(metadata, uid)
+            return result
+
+
+
+        @app.route('/'+conf["illustrationsFolder"]+'/models/<filename>', methods=['GET'])
+        def serveImageModel(filename):
+            return send_from_directory(conf["illustrationsFolder"]+"/models/", filename)
+
+        @app.route('/'+conf["illustrationsFolder"]+'/styles/<filename>', methods=['GET'])
+        def serveImageStyle(filename):
+            return send_from_directory(conf["illustrationsFolder"]+"/styles/", filename)
+
+        @app.route('/'+conf["illustrationsFolder"]+'/loras/<filename>', methods=['GET'])
+        def serveImageLoral(filename):
+            return send_from_directory(conf["illustrationsFolder"]+"/loras/", filename)
+
+        @app.route('/'+conf["outputsFolder"]+'/tmp/<filename>', methods=['GET'])
+        def serveImage(filename):
+            return send_from_directory(conf["outputsFolder"]+"/tmp", filename)
+
+        @app.route('/favicon.ico', methods=['GET'])
+        def serveFavicon():
+            return send_from_directory(os.path.join(app.root_path, 'static/picto'), 'favicon.ico',mimetype='image/vnd.microsoft.icon')
+
+
+
+        app.run(host=conf['host'], port=conf['port'])
+    except SystemExit as e:
+        print('Error!', e)
+        print('Press enter to exit (and fix the problem)')

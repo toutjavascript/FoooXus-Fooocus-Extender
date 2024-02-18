@@ -5,6 +5,13 @@ import importlib.metadata
 import sys
 import platform
 
+# Return true if the python script is running in a venv environment
+def in_venv():
+    return sys.prefix != sys.base_prefix
+
+# Return true if the python script is running on a windows platform (with .bat support)
+def is_windows():
+    return platform.system().lower().find("windows")>=0
 
 def formatBytes(B, round_to=2):
     B = float(B)
@@ -44,14 +51,20 @@ def formatFrequencies(H, round_to=1):
 # create a folder if it doesn't exist    
 def checkFolder(directory):
     if not os.path.exists(directory):
-        print("Creating directory: " + directory)
+        # print("Creating directory: " + directory)
         os.makedirs(directory)
 
 # resize and compress an image 
 def resizeAndCompressImage(imageSource, width, height, quality, imageDestination):
-    img = Image.open(imageSource)
-    img.thumbnail((width, height), Image.LANCZOS)
-    img.save(imageDestination, optimize=True, quality=quality)
+    try:
+        img = Image.open(imageSource)
+        img.thumbnail((width, height), Image.LANCZOS)
+    except:
+        print("Error resizeAndCompressImage img.thumbnail")
+    try:
+        img.save(imageDestination, optimize=True, quality=quality)
+    except:
+        print("Error resizeAndCompressImage img.save")
     return True
 
 
@@ -84,14 +97,11 @@ def getOS():
 
 def checkVersions(modules):
     versions={}
-
     for module in modules:
         try:
             versions[module]=importlib.metadata.version(module)
         except:
             versions[module]="ERROR"
-
-
     return versions
 
 
@@ -116,3 +126,6 @@ def getRequirements(file="requirements.txt", display=False):
             print(" "+"{:<18}".format(module)+requirements[module])
 
     return requirements
+
+def pathJoin(dir, file):
+    return os.path.join(dir, file.replace("/", "\\"))

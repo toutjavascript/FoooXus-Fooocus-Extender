@@ -1,6 +1,8 @@
 # .gitignore
 config.json
 foooxus.db
+exe.bat
+foooxusExe.py
 
 # Python
 *.py[cod]
@@ -13,6 +15,7 @@ __pycache__
 *.egg-info
 dist
 build
+*.spec
 
 # Directories
 .vscodepython foooxus.py
