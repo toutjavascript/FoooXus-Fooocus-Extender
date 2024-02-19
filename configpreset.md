@@ -4,13 +4,13 @@ After the first lines of `config.json` file, dedicated to [general configuration
 First one is the preset arrays of **style-illustrations**. 
 Each element defines a preset with :
         {
-            "name": "s1",
-            "description": "Illustration #1 for all styles, A cat",
-            "metadata": {
-                "Base Model": "juggernautXL_v8Rundiffusion.safetensors",
-                "Prompt": "A cat",
-                "Seed": "314159"
-            }           
+                "name": "s1",
+                "description": "Illustration #1 for all styles, A cat",
+                "metadata": {
+                        "Base Model": "juggernautXL_v8Rundiffusion.safetensors",
+                        "Prompt": "A cat",
+                        "Seed": "314159"
+                }    
         },
 
 A preset contains :
