@@ -15,7 +15,7 @@ You need a running Fooocus instance to use FoooXus.
 You must install FoooXus on the same device than Fooocus.
 
 ## Use the standalone foooxus.exe
-See this document to use foooxus.exe executable
+[See this document to use foooxus.exe executable](executable.md)
 
 ## How to install without running the .exe
 Natively, FoooXus is a python app server that launches a web UI and connect to Fooocus via API
