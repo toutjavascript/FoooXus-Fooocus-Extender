@@ -44,6 +44,7 @@
                 <p>Your Fooocus install is running on <span id="introFooocusURL"></span></p>
                 <p>When you interact with Fooocus User Interface, you activate FoooXus python programm, which exchanges informations and images with Fooocus. </p>
                 <p>If FoooXus python app or Fooocus app are closed, the web UI will detect it and no work could be processed.</p>
+                <p><button type="button" class="btn btn-sm btn-primary" onclick="viewHelpConfigFile()">How to parameter config.json</button></p>
                 <p id="messageApp"></p>
                 <p id="aboutApp"></p>
             </div>       
@@ -51,10 +52,10 @@
         <div class="row" >
             <div class="col-12">   
                 <h2>How presets are working?</h2>
-                <p>Presets are set in the <code>config.json</code> file. You can add or remove presets on each part (Models, Styles and LoRAs).</p>
+                <p>Presets are set in the <code>config.json</code> file. You can add or remove presets on each part (Models, Styles and LoRAs) <button type="button" class="btn btn-sm btn-primary" onclick="viewHelpConfigPreset()">View help about Presets</button>.</p>
                 <p>Open the Models Tab. You will see the presets and the Models list. No image are generated at first start.</p>
                 <p>Click on the button to launch generation of missing picture. And wait a little to view images.</p>
-                <p>Images are stored in <code>./outputs/illustrations/styles/</code> folder, reduced to 512*512 with 80% JPG compression to gain space.</p>
+                <p>Images are stored in <code>./outputs/illustrations/styles/</code> folder, reduced by default to 512*512 with 80% JPG compression to gain space (You can modify that values in config.json).</p>
                 <p>The <code>./outputs/tmp/</code> folder stored all the generated images. You can empty it sometimes.</p>
                 <p>Don't forget that all Fooocus generated images are stored in the <code>your/fooocus/install/outputs/YYYY-MM-DD/</code> folder. You can manage all your images with my Github repository <a href="https://github.com/toutjavascript/Fooocus-Log-Viewer" target="blank"><i class="fa-brands fa-github"></i> toutjavascript/Fooocus-Log-Viewer</a>.</p>
             </div>

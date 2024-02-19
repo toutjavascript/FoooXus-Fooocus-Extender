@@ -10,11 +10,16 @@ FoooXus uses **Fooocus Gradio API** to extend Fooocus functionnalities :
 
 ![How it looks](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/9629f7d0-a710-4e2d-a698-4290d45f71a7)
 
-
-## How to install
-FoooXus is a python app server that launches a web UI and connect to Fooocus via API
+## Prerequisites
 You need a running Fooocus instance to use FoooXus.
 You must install FoooXus on the same device than Fooocus.
+
+## Use the standalone foooxus.exe
+See this document to use foooxus.exe executable
+
+## How to install without running the .exe
+Natively, FoooXus is a python app server that launches a web UI and connect to Fooocus via API
+Install FoooXus following these standard steps.
 
 ```
 # Get the sources 
@@ -44,6 +49,9 @@ python foooxus.py
 
 
 ## How to use every day
+On Windows, you can double-click <code>foooxus.bat</code>
+
+Or if you prefer
 ```
 # Check you are in your (venv) virtual environment
 # if not, activate it
@@ -69,6 +77,10 @@ git pull
 - FoooXus version is tested with V2.1.865 Fooocus Release.
 
 ## History Log
+V0.8 New standalone fooocus.exe 
+- new config.json options 
+- download the fooocus.exe executable file to avoid tedious python, git, pip installations
+
 V0.6 Updates on install process
 - If you have issues, please tell me, with a copy of a terminal
 

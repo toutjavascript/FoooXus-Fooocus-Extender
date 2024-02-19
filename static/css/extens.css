@@ -164,8 +164,14 @@ img.responsive {
     max-width: 100%;
 }
 
+div.imgViewerGrid {
+    font-size: 11px;
+}
+
 div.imgViewer {
   font-size: 11px;
+  min-width: 128px;
+  max-width: 256px;
 }
 div.imgViewer .fileName {
   overflow-x: hidden;

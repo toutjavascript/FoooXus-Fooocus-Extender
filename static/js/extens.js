@@ -310,7 +310,7 @@ function makeAppLoras() {
             let id=secureFile(app.loras[i].replace(".safetensors", ""))+"_"+(app.config["lora-illustrations"][j].name);
             let src=id+".jpg";
             if (illustrations.includes(src)) {
-                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/loras/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="LORA: <b>${secure(app.loras[i].replace(".safetensors", ""))}</b> / PRESET: <b>${secure(app.config["lora-illustrations"][j].name)}</b>"></div>`;
+                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/loras/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="LORA: ${secure(app.loras[i].replace(".safetensors", ""))} / PRESET: ${secure(app.config["lora-illustrations"][j].name)}"></div>`;
             } else {
                 /* This lora #i doesn't have this illustration #k yet */
                 pics+=`<div class="col p-2px imgViewer" id="${id}"></div>`;
@@ -374,7 +374,7 @@ function makeAppLoras() {
     <div class="container p-0 m-0">
         <h2>Your Fooocus installation gets ${app.loras.length} loras</h2>
         <div class="">Here is the list of illustration presets that can be generated with your Fooocus installation for each lora.</div>
-        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder.</div>
+        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder. <button type="button" class="btn btn-sm btn-primary  py-0 m-0" onclick="viewHelpConfigPreset()">View help about Presets</button></div>
         <table class="table">
         <tbody>
         <tr>
@@ -459,7 +459,7 @@ function makeAppModels() {
             let id=secureFile(app.models[i].replace(".safetensors", ""))+"_"+(app.config["model-illustrations"][j].name);
             let src=id+".jpg";
             if (illustrations.includes(src)) {
-                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/models/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="MODEL: <b>${secure(app.models[i].replace(".safetensors", ""))}</b> / PRESET: <b>${secure(app.config["model-illustrations"][j].name)}</b>"></div>`;
+                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/models/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="MODEL: ${secure(app.models[i].replace(".safetensors", ""))} / PRESET: ${secure(app.config["model-illustrations"][j].name)}"></div>`;
             } else {
                 /* This model #i doesn't have this illustration #k yet */
                 pics+=`<div class="col p-2px imgViewer" id="${id}"></div>`;
@@ -510,7 +510,7 @@ function makeAppModels() {
     <div class="container p-0 m-0">
         <h2>Your Fooocus installation gets ${app.models.length} models</h2>
         <div class="">Here is the list of illustration presets that can be generated with your Fooocus installation for each model.</div>
-        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder.</div>
+        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder. <button type="button" class="btn btn-sm btn-primary  py-0 m-0" onclick="viewHelpConfigPreset()">View help about Presets</button></div>
         <table class="table">
         <tbody>
         <tr>
@@ -594,7 +594,7 @@ function makeAppStyles() {
             let id=secureFile(app.styles[i])+"_"+(app.config["style-illustrations"][j].name);
             let src=id+".jpg";
             if (illustrations.includes(src)) {
-                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/styles/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="STYLE: <b>${secure(app.styles[i])}</b> / PRESET: <b>${secure(app.config["style-illustrations"][j].name)}</b>"></div>`;
+                pics+=`<div class="col p-2px imgViewer" id="${id}"><img src="${app.illustrationsFolder}/styles/${src}" loading="lazy" class="responsive thumbnail img-enlargeable" title="STYLE: ${secure(app.styles[i])} / PRESET: ${secure(app.config["style-illustrations"][j].name)}"></div>`;
             } else {
                 pics+=`<div class="col p-2px imgViewer" id="${id}"></div>`;
                 generates[j].push(i);
@@ -655,7 +655,7 @@ function makeAppStyles() {
     <div class="container p-0 m-0">
         <h2>Your Fooocus installation gets ${app.styles.length} styles</h2>
         <div class="">Here is the list of illustration presets that can be generated with your Fooocus installation for each style.</div>
-        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder.</div>
+        <div class="text-help">You can edit/modify/add the list of presets in the <code>config.json</code> file in the FoooXus app folder. <button type="button" class="btn btn-sm btn-primary py-0 m-0" onclick="viewHelpConfigPreset()">View help about Presets</button></div>
         <table class="table">
         <tbody>
         <tr>
@@ -736,7 +736,7 @@ function gridViewIllustration(items, name, cols=5, desc="") {
                 }
             }
             html+=`
-            <div class="col p-2px imgViewer image-grid-view" id="image-grid-view-${i}">
+            <div class="col p-2px imgViewerGrid image-grid-view" id="image-grid-view-${i}">
             <div class="image-container">
                 <img src="${app.illustrationsFolder}/${items}/${illustrations[i]}" loading="lazy" class="responsive thumbnail img-enlargeable" title="${item+": "+title+" PRESET: "+secure(name)}">
                 <span class="text-center fs-12px image-title">${title}</span>

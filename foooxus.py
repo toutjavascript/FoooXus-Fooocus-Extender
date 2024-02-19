@@ -4,6 +4,7 @@
 
 
 import json
+import multiprocessing
 import os
 import html
 import sys
@@ -17,22 +18,13 @@ from src import console
 from src.models import DeviceInfo, Metadata, Image
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import logging
-import argparse
-
 
 # Constants to identify version and execution modalities
 FOOOXUS_RELEASE="0.8"
-FOOOXUS_PYTHON=True
-FOOOXUS_EXE=False
 
 
-argParser = argparse.ArgumentParser(description="FoooXus args")
-argParser.add_argument("-PyInstaller", "--PyInstaller", help="FoooXus PyInstaller running")
-args = argParser.parse_args()
-if (args.PyInstaller=="PyInstaller"):
-    FOOOXUS_PYINSTALLER=True
-else:
-    FOOOXUS_PYINSTALLER=False
+FOOOXUS_PYINSTALLER=True
+
 
 
 
@@ -46,7 +38,6 @@ def checkVersions(requirements):
 
     if FOOOXUS_PYINSTALLER:
         console.printBB("You are running the [b]standalone foooxus.exe[/b] on [b]"+OS+"[/b]")
-        console.printBB("FoooXus ckecks included module versions and compares them to requirements.txt")
     else:
         console.printBB("You are running [b]Python V"+pythonVersion+"[/b] on [b]"+OS+"[/b]")
         if utils.in_venv():
@@ -55,26 +46,26 @@ def checkVersions(requirements):
             console.printBB(" [error] Carefull, (venv) is not activated. You may experience module version issues[/error]")
         console.printBB("FoooXus ckecks installed module versions and compares them to requirements.txt")
 
-    console.printBB("  [b]Modules            Requirement       Installed version[/b]")
+        console.printBB("  [b]Modules            Requirement       Installed version[/b]")
 
-    for module in requirements:
-        if versions[module]==requirements[module]:
-            version="[ok]✔ "+versions[module]+"[/ok]"
+        for module in requirements:
+            if versions[module]==requirements[module]:
+                version="[ok]✔ "+versions[module]+"[/ok]"
+            else:
+                version="[error]X "+versions[module]+"[/error]"
+                require=False
+            
+            console.printBB("  [b]{:<19}".format(module)+"[/b]{:<18}".format(requirements[module])+version)
+
+        if require:
+            console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
         else:
-            version="[error]X "+versions[module]+"[/error]"
-            require=False
-           
-        console.printBB("  [b]{:<19}".format(module)+"[/b]{:<18}".format(requirements[module])+version)
-
-    if require:
-        console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
-    else:
-        console.printBB(" [error]One requirement is not met. FoooXus could fail[/error]")
+            console.printBB(" [error]One requirement is not met. FoooXus could fail[/error]")
     print("")
 
     versions["OS"]=OS
     versions["python"]=pythonVersion
-    versions["pyInstaller"]=FOOOXUS_PYINSTALLER
+    versions["PyInstaller"]=FOOOXUS_PYINSTALLER
 
     return versions
 
@@ -138,7 +129,7 @@ def loadFooocusConfig(dir):
 def checkInit():
     # Check if config.json not exists: run initialization
     if os.path.exists("./config.json")==False:
-        console.printBB("[reverse][h1]*************************   FIRST INIT of FoooXuS APP V"+FOOOXUS_RELEASE+"   *************************[/h1][/reverse]")
+        console.printBB("[reverse][h1]*************************   FIRST INIT of FoooXuS APP V"+FOOOXUS_RELEASE+"   *************************[/h1][/reverse][reset]")
         console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
         console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
 
@@ -149,7 +140,10 @@ def checkInit():
         console.printBB('"[b]fooocus-directory[/b]": "[b]C:\\Users\\TJS\\Desktop\\IA\\StabilityMatrix\\Data\\Packages\\Fooocus[/b]"')
         console.printBB('"[b]fooocus-address[/b]": "[b]127.0.0.1:7865[/b]"')
         console.printBB("")
-        console.printBB("Once checked, restart [shell]python foooxus.py[/shell] "+("or [shell]foooxus.bat[/shell] here" if utils.is_windows() else ""))
+        if FOOOXUS_PYINSTALLER:
+            console.printBB("Once checked, restart [shell]foooxus.exe[/shell] ")
+        else:
+            console.printBB("Once checked, restart [shell]python foooxus.py[/shell] "+("or [shell]foooxus.bat[/shell] here" if utils.is_windows() else ""))
         console.printBB("")
 
 
@@ -159,16 +153,20 @@ def checkInit():
 # STARTING FOOOXUS APP
 if __name__ == '__main__':
     try:
+        multiprocessing.freeze_support()
         checkInit()
 
-        console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse]")
+        console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse][reset]")
         console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
         console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
 
         conf=loadConfig()
 
         app = Flask(__name__)
-        # Prevent http logging in terminal 
+
+        appPath=utils.getAppPath()
+
+        # Prevent http flask web server logging in terminal 
         log = logging.getLogger('werkzeug')
         log.disabled = True
 
@@ -188,8 +186,6 @@ if __name__ == '__main__':
         @app.route('/ajax/pingFoooxus', methods=['POST'])
         def pingFoooxus():
             return {"ajax":True, "ping": True, "config": conf}
-
-
 
         @app.route('/ajax/getDeviceInfo', methods=['POST'])
         def getDeviceInfo():
@@ -242,27 +238,29 @@ if __name__ == '__main__':
 
         @app.route('/'+conf["illustrationsFolder"]+'/models/<filename>', methods=['GET'])
         def serveImageModel(filename):
-            return send_from_directory(conf["illustrationsFolder"]+"/models/", filename)
+            return send_from_directory(os.path.join(appPath, conf["illustrationsFolder"]+"/models/"), filename)
 
         @app.route('/'+conf["illustrationsFolder"]+'/styles/<filename>', methods=['GET'])
         def serveImageStyle(filename):
-            return send_from_directory(conf["illustrationsFolder"]+"/styles/", filename)
+            # print(os.path.join(os.path.join(appPath, conf["illustrationsFolder"]+"/styles/"), filename))
+            return send_from_directory(os.path.join(appPath, conf["illustrationsFolder"]+"/styles/"), filename)
 
         @app.route('/'+conf["illustrationsFolder"]+'/loras/<filename>', methods=['GET'])
         def serveImageLoral(filename):
-            return send_from_directory(conf["illustrationsFolder"]+"/loras/", filename)
+            return send_from_directory(os.path.join(appPath, conf["illustrationsFolder"]+"/loras/"), filename)
 
         @app.route('/'+conf["outputsFolder"]+'/tmp/<filename>', methods=['GET'])
         def serveImage(filename):
-            return send_from_directory(conf["outputsFolder"]+"/tmp", filename)
+            # print(os.path.join(os.path.join(appPath, conf["outputsFolder"]+"/tmp/"), filename))
+            return send_from_directory(os.path.join(appPath, conf["outputsFolder"]+"/tmp/"), filename)
 
         @app.route('/favicon.ico', methods=['GET'])
         def serveFavicon():
-            return send_from_directory(os.path.join(app.root_path, 'static/picto'), 'favicon.ico',mimetype='image/vnd.microsoft.icon')
+            return send_from_directory(os.path.join(appPath, 'static/picto'), 'favicon.ico',mimetype='image/vnd.microsoft.icon')
 
 
 
         app.run(host=conf['host'], port=conf['port'])
     except SystemExit as e:
-        print('Error!', e)
-        print('Press enter to exit (and fix the problem)')
+        print("")
+        #print("FoooXus emits exception ", e)

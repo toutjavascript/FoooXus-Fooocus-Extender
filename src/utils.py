@@ -67,6 +67,13 @@ def resizeAndCompressImage(imageSource, width, height, quality, imageDestination
         print("Error resizeAndCompressImage img.save")
     return True
 
+def getAppPath():
+    realpath=os.path.realpath(__file__)
+    appPath=os.path.dirname(realpath)[0:-4]
+    #print("os.path.realpath(__file__):"+os.path.realpath(__file__)) # => C:\IA\FoooXus-Fooocus-Extender\src\utils.py
+    #print('full path =', appPath) # => C:\IA\FoooXus-Fooocus-Extender
+
+    return appPath
 
 def getFiles(dir, extension):
     if extension[0]==".":
