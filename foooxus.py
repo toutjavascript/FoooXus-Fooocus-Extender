@@ -23,7 +23,7 @@ import logging
 FOOOXUS_RELEASE="0.8"
 
 
-FOOOXUS_PYINSTALLER=True
+FOOOXUS_PYINSTALLER=False 
 
 
 
