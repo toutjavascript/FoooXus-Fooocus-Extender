@@ -29,7 +29,8 @@ def printExceptionError(error):
     caller_name = inspect.stack()[1].function
     file=inspect.stack()[1].filename
     file=file[file.rfind("\\")+1:]
-    printBB("[error]Exception Error on "+file+"/"+caller_name+"(): "+repr(error)+"[/error]")
+    printBB("[error]Exception Error on "+file+"/"+caller_name+"():[/error]");
+    printBB("  [error]"+repr(error)+"[/error]")
 
 # From this great tuto https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
 def test():

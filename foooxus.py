@@ -20,7 +20,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.8"
+FOOOXUS_RELEASE="0.8.1"
 
 
 FOOOXUS_PYINSTALLER=False 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
         multiprocessing.freeze_support()
         checkInit()
 
-        console.printBB("[reverse][h1]************************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   ************************[/h1][/reverse][reset]")
+        console.printBB("[reverse][h1]**********************    STARTING FoooXuS APP V"+FOOOXUS_RELEASE+"   **********************[/h1][/reverse][reset]")
         console.printBB("  [ok]Thanx for using. Please report issues and ideas on[/ok] ")
         console.printBB("  [u]https://github.com/toutjavascript/FoooXus-Fooocus-Extender[/u] ")
 

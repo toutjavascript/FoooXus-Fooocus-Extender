@@ -20,15 +20,24 @@ class FooocusApi:
 
     def getClient(self):
         if (self.client==None):
-            print("Open API client to Fooocus instance at "+self.base_url+" ...")
+            # print("Open API client to Fooocus instance at "+self.base_url+" ...")
             try:
                 self.client = Client(self.base_url, serialize=False)
-                print("Client opened")
+                console.printBB("[ok]Great! FoooXus is now connected to Fooocus[/ok]")
                 return self.client
             except Exception as e:
                 self.client=None
-                print("Client not opened")
-                print(f"Error: {e}")
+                console.printBB("[error]Connection to Fooocus failed...[/error]")
+                exceptionName=type(e).__name__
+                if exceptionName=="ConnectionError":
+                    console.printBB("[error] ConnectionError, check that:[/error]")
+                    console.printBB("[error]  - Fooocus must be running, on the same device[/error]")
+                    console.printBB("[error]  - Fooocus address config.json is set to "+self.base_url+" [/error]")
+                else:
+                    console.printBB("[error] "+exceptionName+"[/error]")
+
+                print(f"{e}")
+                print("")
                 return None
         else:
             return self.client
@@ -36,17 +45,25 @@ class FooocusApi:
 
     # Ping Fooocus instance 
     def pingFooocus(self, firstCall=False):
+
         try:
             client=self.getClient()
+            if(client is None):
+                # Not connected, so no call to predict
+                return {"ajax":True, "error":True}
+           
             result = client.predict( fn_index=9 )
             if firstCall:
                 console.printBB("[ok]FoooXus is connected to Fooocus. Let's play in the web UI ![/ok]")
             return {"ajax":True, "error":False, "ping":True, "fooocusUrl": self.base_url}
         except Exception as e:
-            console.printBB("[error]FoooXus not connected to Fooocus gradio API :([/error]")
-            console.printBB("[error] It could be because Fooocus changes version...[/error]")
-
             console.printExceptionError(e)
+            console.printBB("[error]FoooXus is not connected to Fooocus gradio API :([/error]")
+            console.printBB("[error] - Fooocus must be running, on the same device[/error]")
+            console.printBB("[error] - Fooocus must be at least V2.1.865[/error]")
+            console.printBB("[error] - If FoooXus app has already worked, Fooocus may have changed version.[/error]")
+            console.printBB("[error]   it may break API calls[/error]")
+            console.printBB("")
             return {"ajax":True, "error":True}
 
 
@@ -263,5 +280,6 @@ class FooocusApi:
         except Exception as e:
             print("sendCreateImage exception")
             print(f"Error: {e}")
+            print(" Check the Fooocus console terminal to view more indications")
             traceback.print_exc()  # Print the full traceback
             return {"ajax":True, "error":True}

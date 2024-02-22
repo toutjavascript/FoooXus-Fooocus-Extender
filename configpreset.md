@@ -19,6 +19,30 @@ A preset contains :
 - a description
 - a metadata object that describes how the picture must be generated
 
+Metadata part may contain that parameters :
+
+```
+{
+        "name": "s1",
+        "description": "Illustration #1 for all styles, A cat",
+        "metadata": {
+                "Base Model": "juggernautXL_v8Rundiffusion.safetensors",
+                "Prompt": "A cat",
+                "Seed": "314159",
+                "ADM Guidance": "(1.5, 0.8, 0.3)",
+                "Sampler": "dpmpp_2m_sde_gpu",
+                "Scheduler": "karras",
+                "Performance": "Quality",
+                "Sharpness": 5,
+                "Guidance Scale": 2,
+                "Refiner Model": "juggernautXL_v8Rundiffusion.safetensors",
+                "Refiner Switch": 0.5,
+                "Lora 1": "sd_xl_offset_example",
+                "Weight Lora 1": 1
+        }    
+},
+```
+
 Add, edit or remove presets as you like.
 
 **You must restart FoooXus app to take into account this file updates**
