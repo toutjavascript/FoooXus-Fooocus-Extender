@@ -77,6 +77,8 @@ git pull
 - FoooXus version is tested with V2.1.865 Fooocus Release.
 
 ## History Log
+V0.8.1 Improve the error messages 
+
 V0.8 New standalone fooocus.exe 
 - new config.json options 
 - download the fooocus.exe executable file to avoid tedious python, git, pip installations
