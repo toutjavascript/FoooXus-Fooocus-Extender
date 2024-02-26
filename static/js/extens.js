@@ -1236,6 +1236,27 @@ function updateQueue() {
     }    
 }
 
+function clearQueue() {
+    console.log("clearQueue()");
+    new jBox("Confirm", {
+        confirmButton: "Clear queue",
+        cancelButton: "Cancel",
+        content: "Do you really want clear queue?",
+        blockScroll: false,
+        confirm: function () {
+            sendCancel();
+            var n = app.calls.length;
+            for (let i=0; i<n; i++) {
+                if (app.calls[i].calledTime==0) {
+                    app.calls.splice(i, 1);
+                    if (i>0) i--;
+                    n = app.calls.length;
+                }
+           }            
+		}
+    }).open();
+}
+
 function makeAppQueue() {
     if (!app.ready) return;
 
@@ -1258,7 +1279,14 @@ function makeAppQueue() {
     if (queues.length==0) {
         queue="<h2>No work in queue</h2>";
     } else {
-        queue="<h2>You have "+queues.length+" works in queue</h2>";
+        if (queues.length==1) {
+            queue="<br><br><h2>You have a work still in progess. Fooocus will stop it soon.</h2>";
+        } else {
+            queue="<h2>You have "+queues.length+" works in queue</h2>";
+            queue+=`<div id="divClearQueue">Works are in progress... <button type="button" class="btn btn-warning" id="btnClearQueue" onclick="clearQueue()">Clear queue</button></div>`;
+        }
+
+
         queue+=`<table class='table'>
             <thead>
             <tr>
@@ -1289,7 +1317,8 @@ function makeAppQueue() {
     if (dones.length==0) {
         done="<h2>No work done</h2>"
     } else {
-        done="<h2>You have "+dones.length+" works done</h2>";
+        done="<h2>You have "+dones.length+" work"+(dones.length>1?"s":"")+" done</h2>";
+        
         done+=`<table class='table'>
             <thead>
             <tr>
@@ -1470,6 +1499,30 @@ function pingFooocus(callback=function() {}, error=function() {}) {
         }
     });
 }
+
+
+function sendCancel(callback=function() {}, error=function() {}) {
+    /* cancel Queue */
+    $.ajax({
+        url: "/ajax/sendCancel",
+        dataType: "json",
+        method: "POST",
+        success: function (data) {
+            if (data.ajax) {
+                console.log("sendCancel to Fooocus OK")
+            } else {
+                console.log("sendCancel ERROR");
+                error();
+            }
+        },
+        error: function(evt) {
+            console.log("Ajax sendCancel error")
+            console.log(evt);
+            error();
+        }
+    });
+}
+
 
 
 function getLoras(callback=function() {}, error=function() {}) {

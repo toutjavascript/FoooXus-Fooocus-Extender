@@ -20,7 +20,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.8.1"
+FOOOXUS_RELEASE="0.8.2"
 
 
 FOOOXUS_PYINSTALLER=False 
@@ -98,6 +98,8 @@ def loadConfig():
     utils.checkFolder(conf["illustrationsFolder"]+"/loras")
 
     conf["init"]=True  # flag to tell no api call is made yet
+
+
 
     # check if database exists
     # sql.connect()
@@ -218,6 +220,11 @@ if __name__ == '__main__':
         def getConfig():
             conf["ajax"]=True
             return conf
+
+        @app.route('/ajax/sendCancel', methods=['POST'])
+        def cancel():
+            cancel=myApi.sendCancel()
+            return json.dumps(cancel)
 
         @app.route('/ajax/getIllustrations', methods=['POST'])
         def getIllustrations():

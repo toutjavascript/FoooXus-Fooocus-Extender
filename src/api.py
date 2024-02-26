@@ -9,8 +9,27 @@ from src import console
 from gradio_client import Client
 
 
+class ConfigApi:
+    def __init__(self):
+        self.ping=9
+        self.cancel=0
+        self.init=33
+        self.generate=34
+        self.models=24
+        self.styles=19
+        self.checkDelta=0
+        self.delta=0
+        self.deltaPing=0
+        self.deltaCancel=0
+        self.deltaInit=0
+        self.deltaGenerate=0
+        self.deltaModels=0
+        self.deltaStyles=0
+
+
 class FooocusApi:
     def __init__(self, base_url, outputFolder="outputs/tmp"):
+        self.config=ConfigApi()
         self.client=None
         self.outputFolder=outputFolder
         if base_url[0:7] != "http://"[0:7]:
@@ -41,18 +60,17 @@ class FooocusApi:
                 return None
         else:
             return self.client
-    
+
 
     # Ping Fooocus instance 
     def pingFooocus(self, firstCall=False):
-
         try:
             client=self.getClient()
             if(client is None):
                 # Not connected, so no call to predict
                 return {"ajax":True, "error":True}
            
-            result = client.predict( fn_index=9 )
+            result = client.predict( fn_index=self.config.ping )
             if firstCall:
                 console.printBB("[ok]FoooXus is connected to Fooocus. Let's play in the web UI ![/ok]")
             return {"ajax":True, "error":False, "ping":True, "fooocusUrl": self.base_url}
@@ -65,12 +83,23 @@ class FooocusApi:
             console.printBB("[error]   it may break API calls[/error]")
             console.printBB("")
             return {"ajax":True, "error":True}
-
+    
+    # Cancel generation
+    def sendCancel(self):
+        try:      
+            console.printBB("[b] /!\ You have canceled the queue[/b]")
+            console.printBB("[b] [/b]")
+            result = self.getClient().predict( fn_index=self.config.cancel )
+            return {"ajax":True, "error":False}
+        except Exception as e:
+            console.printExceptionError(e)
+            return {"ajax":True, "error":True}
+        
 
     # Get list of all models installed on the Fooocus folder
     def getModels(self):
         try:
-            result = self.getClient().predict( fn_index=24 )
+            result = self.getClient().predict( fn_index=self.config.models )
             models=[]
             if (result[0]):
                 if (result[0]["choices"]):
@@ -86,7 +115,7 @@ class FooocusApi:
     # Get all styles available for Fooocus
     def getStyles(self):
         try:
-            result = self.getClient().predict( [], fn_index=19 )
+            result = self.getClient().predict( [], fn_index=self.config.styles )
             styles=[]
             if ("choices" in result):
                 for style in result["choices"]:
@@ -144,7 +173,7 @@ class FooocusApi:
 				False,	# bool in 'Enable Mask Upload' Checkbox component
 				False,	# bool in 'Invert Mask' Checkbox component
 				-64,	# int | float (numeric value between -64 and 64)								in 'Mask Erode or Dilate' Slider component
-				fn_index=33
+				fn_index=self.config.init
             )
             return {"ajax":True, "error":False, "init":True}
         except Exception as e:
@@ -211,7 +240,7 @@ class FooocusApi:
                 0,	# int | float (numeric value between 0.0 and 1.0)				in 'Stop At' Slider component
                 0,	# int | float (numeric value between 0.0 and 2.0)				in 'Weight' Slider component
                 "ImagePrompt",	# str in 'Type' Radio component
-                fn_index=34
+                fn_index=self.config.generate
             )
 
 

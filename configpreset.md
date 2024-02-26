@@ -45,6 +45,6 @@ Metadata part may contain that parameters :
 
 Add, edit or remove presets as you like.
 
-**You must restart FoooXus app to take into account this file updates**
+**You must restart FoooXus app to take into account these file updates**
 
 Models and Loras presets below in the file are similar

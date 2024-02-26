@@ -77,6 +77,8 @@ git pull
 - FoooXus version is tested with V2.1.865 Fooocus Release.
 
 ## History Log
+V0.8.2 Add a button to clear queue 
+
 V0.8.1 Improve the error messages 
 
 V0.8 New standalone fooocus.exe 
