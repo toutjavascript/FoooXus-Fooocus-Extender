@@ -77,6 +77,8 @@ git pull
 - FoooXus version is tested with V2.1.865 Fooocus Release.
 
 ## History Log
+V0.8.3 Fix issue on macOS https://github.com/toutjavascript/FoooXus-Fooocus-Extender/issues/5
+
 V0.8.2 Add a button to clear queue 
 
 V0.8.1 Improve the error messages 

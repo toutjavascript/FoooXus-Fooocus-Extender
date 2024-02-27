@@ -98,6 +98,10 @@ def getOS():
         build=version[version.rfind(".")+1:]
         if (build>="22000"):
             release="11"
+    if platform.system()=="Darwin":
+        os="macOS"
+        build=release
+        release=""
 
     return platform.system()+" "+release+" Build "+build
 

@@ -1192,6 +1192,10 @@ function checkModelExists(model) {
 
 /* Update the initial display of the app */
 function showDeviceInfo() {
+    if (!app.device.detected) {
+        $("div#hardware").html("hardware is not detected");
+        return "";
+    }
     let cpu=app.device.cpu_name.replace("Intel(R) Core(TM) i", "i").replace("Intel(R) Xeon(R) CPU", "Xeon").replace("AMD Ryzen", "Ryzen").replace("AMD EPYC", "EPYC").replace("CPU", "").replace("Processor", "");
     cpu=cpu.replace(/[0-9]*-Core/gi, "").trim();
     cpu+=" "+app.device.cpu_threads+"-threads";
