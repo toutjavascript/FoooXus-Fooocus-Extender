@@ -17,6 +17,7 @@ def printBB(text):
     text=re.sub(r"(\[u\])([^\[\]]+)(\[/u\])","\033[4m\\2\033[24m",text,re.IGNORECASE)
     text=re.sub(r"(\[d\])([^\[\]]+)(\[/d\])","\033[2m\\2\033[22m",text,re.IGNORECASE)
     text=re.sub(r"(\[fade\])([^\[\]]+)(\[/fade\])","\033[2m\\2\033[22m",text,re.IGNORECASE)
+    text=re.sub(r"(\[warning\])([^\[\]]+)(\[/warning\])","\033[33m\\2\033[22m",text,re.IGNORECASE)
     text=re.sub(r"(\[reset\])","\033[0m\033[49m",text,re.IGNORECASE)
     text=re.sub(r"(\[reverse\])(.+)(\[/reverse\])","\033[7m\\2\033[0m",text,re.IGNORECASE)
     text=re.sub(r"(\[header\])([^\[\]]+)(\[/header\])","\\033[1m \\2\033[0m",text,re.IGNORECASE)

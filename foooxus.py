@@ -20,7 +20,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.8.3"
+FOOOXUS_RELEASE="0.9.0"
 
 
 FOOOXUS_PYINSTALLER=False 
