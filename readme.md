@@ -105,3 +105,6 @@ View history
 
 Python terminal shows all generations
 ![Terminal shows generation log](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/3d9190f8-e730-4893-8e9f-dda637419778)
+
+## Tested and validated on Windows 10, 11 and macOS
+FoooXus should work on Linux too
