@@ -77,6 +77,8 @@ git pull
 - FoooXus version is tested with V2.3.0 Fooocus Release.
 
 ## History Log
+V0.9.5 Force optimized Performance Settings when Turbo or Lightning models are used
+
 V0.9.1 Adapt to Gradio API to Fooocus 2.3.0
        Auto clean /outputs/tmp/ folder at launch    
 

@@ -225,19 +225,32 @@ class FooocusApi:
             admSplit=adm.split(", ")
             start_time = timeit.default_timer()
             # self.initFooocus(metadata) # not present in Fooocus V2.2.1
+
+            # Check Turbo or Lighting models
+
+
+
             now = datetime.now()
             console.printBB("[hour]"+now.strftime("%H:%M:%S")+"[/hour] [b]#"+uid+"[/b] New generation asked and sent to Fooocus")
             console.printBB("          [fade]Prompt:[/fade] "+metadata["Prompt"])
             console.printBB("          [fade]Model:[/fade]  "+metadata["Base Model"])
+            performance=metadata["Performance"]
+            if "lightning" in metadata["Base Model"].lower():
+                console.printBB("          [fade]Lightning model:[/fade] "+"Force to Lightning Performance")
+                performance="Lightning"
+
+            if "turbo" in metadata["Base Model"].lower():    
+                console.printBB("          [fade]Turbo model:[/fade] "+"Force to Extreme Speed Performance")
+                performance="Extreme Speed"
             console.printBB("          [fade]Styles:[/fade] "+"," .join(str(s) for s in metadata["Styles"]))
-      
+
 
             result = self.getClient().predict( 
                 False,	                    # bool in 'Generate Image Grid for Each Batch' Checkbox component
                 metadata["Prompt"],	        # str in 'parameter_10' Textbox component
                 metadata["Negative Prompt"],# str in 'Negative Prompt' Textbox component
                 metadata["Styles"],	        # List[str] in 'Selected Styles' Checkboxgroup component
-                metadata["Performance"],	# str in 'Performance' Radio component
+                performance,	            # str in 'Performance' Radio component
                 '1024×1024',	            # str in 'Aspect Ratios' Radio component
                 1,	                        # int | float (numeric value between 1 and 64)	in 'Image Number' Slider component
                 "png",	                    # str in 'Output Format' Radio component

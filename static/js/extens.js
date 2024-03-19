@@ -453,7 +453,10 @@ function makeAppModels() {
         generates[i]=[];
     }
 
+    let lightnings=[], turbos=[];
     for (let i=0; i<app.models.length; i++) {
+        if (app.models[i].toLowerCase().indexOf("lightning")>=0) { lightnings.push(i); }
+        if (app.models[i].toLowerCase().indexOf("turbo")>=0) { turbos.push(i); }
         let pics="";
         for (let j=0; j<app.config["model-illustrations"].length; j++) {
             let id=secureFile(app.models[i].replace(".safetensors", ""))+"_"+(app.config["model-illustrations"][j].name);
@@ -478,6 +481,7 @@ function makeAppModels() {
             </div>
         `
     }
+
     let presets="";
     for (let i=0; i<app.config["model-illustrations"].length; i++) { 
         let preset=app.config["model-illustrations"][i];
@@ -487,6 +491,13 @@ function makeAppModels() {
         </button>
         <br>`
         if (generates[i].length==0) {btn="";}
+        let btnLightning="", btnTurbo="";
+        if (lightnings.length>0) {
+            btnLightning=`<button type="button" class="btn btn-sm btn-warning display-inline m-1 p-0 px-1 fs-12px" onclick="generatePresetModelIllustration(${i}, '${secure(preset.name)}', [${lightnings.join(",")}])">Regenerate ${lightnings.length} Lightning Model illustrations</button><br>`;
+        }
+        if (turbos.length>0) {
+            btnTurbo=`<button type="button" class="btn btn-sm btn-warning display-inline m-1 p-0 px-1 fs-12px" onclick="generatePresetModelIllustration(${i}, '${secure(preset.name)}', [${turbos.join(",")}])">Regenerate ${turbos.length} Turbo Model illustrations</button><br>`;
+        }        
         let title=secure("Grid view of "+app.models.length+" models for the ["+preset.name+" - Prompt= "+preset.metadata.Prompt+"]");
         presets+=`            
         <td class="fs-13px" style="width: ${100/app.config["model-illustrations"].length}%">
@@ -500,6 +511,8 @@ function makeAppModels() {
             <div class="preset-param">Styles: ${secure(preset.metadata.Styles.join(", "))} </div>
             <div class="text-center">
                 ${btn}
+                ${btnLightning}
+                ${btnTurbo}
                 <button type="button" class="btn btn-sm btn-danger display-inline m-1 p-0 px-1 fs-12px" onclick="generatePresetModelIllustration(${i}, '${secure(preset.name)}', 'all')">Regenerate all illustrations</button>
             </div>
         </td>
