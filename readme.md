@@ -72,6 +72,10 @@ To update FoooXus from this github repository, open a terminal in your FoooXus-F
 git pull
 ```
 
+FoooXus can now force Performance Settings when those models are used. New button to regenerate Models illustrations are displayed
+![Capture d’écran 2024-03-19 à 15 22 02](https://github.com/toutjavascript/FoooXus-Fooocus-Extender/assets/30899600/65ac30fb-eeb1-4785-bcd2-c19aa1c58524)
+
+
 ## Updates on Fooocus
 - Fooocus could be updated at every moment. It could broke the API.
 - FoooXus version is tested with V2.3.0 Fooocus Release.
