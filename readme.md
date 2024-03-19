@@ -74,9 +74,12 @@ git pull
 
 ## Updates on Fooocus
 - Fooocus could be updated at every moment. It could broke the API.
-- FoooXus version is tested with V2.2.1 Fooocus Release.
+- FoooXus version is tested with V2.3.0 Fooocus Release.
 
 ## History Log
+V0.9.1 Adapt to Gradio API to Fooocus 2.3.0
+       Auto clean /outputs/tmp/ folder at launch    
+
 V0.9.0 Adapt to Gradio API to Fooocus 2.2.1
 
 V0.8.3 Fix issue on macOS https://github.com/toutjavascript/FoooXus-Fooocus-Extender/issues/5

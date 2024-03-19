@@ -14,7 +14,7 @@ class ConfigApi:
         self.ping=10
         self.cancel=0
         self.init=35
-        self.generate=38
+        self.generate=40
         self.models=26
         self.styles=20
         self.checkDelta=False
@@ -28,7 +28,8 @@ class ConfigApi:
 
 
 class FooocusApi:
-    def __init__(self, base_url, outputFolder="outputs/tmp"):
+    def __init__(self, base_url, outputFolder, FOOOCUS_MIN_RELEASE):
+        self.FOOOCUS_MIN_RELEASE=FOOOCUS_MIN_RELEASE
         self.config=ConfigApi()
         self.client=None
         self.outputFolder=outputFolder
@@ -88,7 +89,7 @@ class FooocusApi:
                 console.printExceptionError(e)
                 console.printBB("[error]FoooXus is not connected to Fooocus gradio API :([/error]")
                 console.printBB("[error] - Fooocus must be running, on the same device[/error]")
-                console.printBB("[error] - Fooocus must be at least V2.2.1[/error]")
+                console.printBB("[error] - Fooocus must be at least "+self.FOOOCUS_MIN_RELEASE+"[/error]")
                 console.printBB("[error] - If FoooXus app has already worked, Fooocus may have changed version.[/error]")
                 console.printBB("[error]   it may break API calls[/error]")
                 console.printBB("")
@@ -241,6 +242,7 @@ class FooocusApi:
                 1,	                        # int | float (numeric value between 1 and 64)	in 'Image Number' Slider component
                 "png",	                    # str in 'Output Format' Radio component
                 metadata["Seed"],	        # str in 'Seed' Textbox component
+                True,                   	# bool in 'Read wildcards in order' Checkbox component
                 metadata["Sharpness"],	    # int | float (numeric value between 0.0 and 30.0)	in 'Image Sharpness' Slider component
                 metadata["Guidance Scale"],	# int | float (numeric value between 1.0 and 30.0)	in 'Guidance Scale' Slider component
                 metadata["Base Model"], 	# str 	in 'Base Model (SDXL only)' Dropdown component

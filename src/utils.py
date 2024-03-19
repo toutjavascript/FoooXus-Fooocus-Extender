@@ -140,3 +140,10 @@ def getRequirements(file="requirements.txt", display=False):
 
 def pathJoin(dir, file):
     return os.path.join(dir, file.replace("/", "\\"))
+
+
+def clearTmpFolder(folder_path="outputs/tmp"):
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)

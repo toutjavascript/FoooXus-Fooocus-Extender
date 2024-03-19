@@ -20,8 +20,8 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.9.0"
-
+FOOOXUS_RELEASE="0.9.1"
+FOOOCUS_MIN_RELEASE="2.2.3"
 
 FOOOXUS_PYINSTALLER=False 
 
@@ -89,6 +89,7 @@ def loadConfig():
     conf["versions"]=versions
     conf["requirements"]=requirements
     conf["FOOOXUS_RELEASE"]=FOOOXUS_RELEASE
+    conf["FOOOCUS_MIN_RELEASE"]=FOOOCUS_MIN_RELEASE
 
     # check if outputs folder exists
     utils.checkFolder(conf["outputsFolder"])
@@ -96,6 +97,13 @@ def loadConfig():
     utils.checkFolder(conf["illustrationsFolder"]+"/models")
     utils.checkFolder(conf["illustrationsFolder"]+"/styles")
     utils.checkFolder(conf["illustrationsFolder"]+"/loras")
+
+
+    # clear tmp folder
+    console.printBB("Cleaning tmp folder")
+    
+    utils.clearTmpFolder("outputs/tmp")
+
 
     conf["init"]=True  # flag to tell no api call is made yet
 
@@ -176,7 +184,7 @@ if __name__ == '__main__':
         console.printBB("[ok]Now, open FoooXus web UI on [u]http://"+conf["host"]+":"+str(conf["port"])+"[/u][/ok]")
         console.printBB("")
 
-        myApi = api.FooocusApi(conf['fooocus-address']+"")
+        myApi = api.FooocusApi(conf['fooocus-address']+"", "outputs/tmp", FOOOCUS_MIN_RELEASE)
 
 
         @app.route('/')
