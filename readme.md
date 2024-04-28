@@ -77,6 +77,11 @@ git pull
 - FoooXus version is tested with V2.3.0 Fooocus Release.
 
 ## History Log
+V0.9.5 New optional loras-directory on config.json
+       To fix issue https://github.com/toutjavascript/FoooXus-Fooocus-Extender/issues/7 where Loras are not found,
+       you can add a new line in config.json. For example:
+       "loras-directory": "D:\\datas\\StabilityMatrix\\Data\\Models\\Lora",
+
 V0.9.5 Force optimized Performance Settings when Turbo or Lightning models are used
 
 V0.9.1 Adapt to Gradio API to Fooocus 2.3.0

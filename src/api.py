@@ -153,6 +153,8 @@ class FooocusApi:
     # Get all Loras from the loras-directory
     def getLoras(self, dir):
         try:
+            console.printBB("getLoras() in dir")
+            console.printBB(dir)
             loras=utils.getFiles(dir, ".safetensors")
             return {"ajax":True, "error":False, "loras":loras}
         except:

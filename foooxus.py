@@ -20,7 +20,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.9.5"
+FOOOXUS_RELEASE="0.9.6"
 FOOOCUS_MIN_RELEASE="2.2.3"
 
 FOOOXUS_PYINSTALLER=False 
@@ -117,7 +117,10 @@ def loadConfig():
 
     if conf["fooocusConfig"]:
         conf["messageConfig"]=""
-        conf["loras-directory"]=conf["fooocusConfig"]["path_loras"]
+        if "loras-directory" in conf:
+            console.printBB("Loras folder: " + conf["loras-directory"])
+        else:
+            conf["loras-directory"]=conf["fooocusConfig"]["path_loras"]
     else:
         conf["messageConfig"]="<b>'fooocus-directory'</b> parameter in config.json is not correct.<br>No Fooocus install found in this folder:<br>"+html.escape(conf["fooocus-directory"])
 
