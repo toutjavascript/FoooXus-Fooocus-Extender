@@ -81,7 +81,7 @@ FoooXus can now force Performance Settings when those models are used. New butto
 - FoooXus version is tested with V2.3.0 Fooocus Release.
 
 ## History Log
-V0.9.5 New optional loras-directory on config.json
+V0.9.6 New optional loras-directory on config.json
        To fix issue https://github.com/toutjavascript/FoooXus-Fooocus-Extender/issues/7 where Loras are not found,
        you can add a new line in config.json. For example:
        "loras-directory": "D:\\datas\\StabilityMatrix\\Data\\Models\\Lora",
