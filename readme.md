@@ -15,6 +15,7 @@ You need a running Fooocus instance to use FoooXus.
 You must install FoooXus on the same device than Fooocus.
 
 ## Use the standalone foooxus.exe
+NOT AVAILABLE ON FOOOCUS CURRENT RELEASE
 [See this document to use foooxus.exe executable](executable.md)
 
 ## How to install without running the .exe
@@ -78,9 +79,11 @@ FoooXus can now force Performance Settings when those models are used. New butto
 
 ## Updates on Fooocus
 - Fooocus could be updated at every moment. It could broke the API.
-- FoooXus version is tested with V2.3.0 Fooocus Release.
+- FoooXus version is tested with V2.4.1 Fooocus Release.
 
 ## History Log
+V0.9.7 Update to V2.4.1 Fooocus Release
+
 V0.9.6 New optional loras-directory parameter on config.json
        To fix issue https://github.com/toutjavascript/FoooXus-Fooocus-Extender/issues/7 where Loras are not found,
        you can add a new line in config.json. For example:

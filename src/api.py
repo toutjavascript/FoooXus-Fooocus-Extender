@@ -11,12 +11,12 @@ from gradio_client import Client
 
 class ConfigApi:
     def __init__(self):
-        self.ping=10
+        self.ping=11
         self.cancel=0
         self.init=35
-        self.generate=40
-        self.models=26
-        self.styles=20
+        self.generate=46
+        self.models=32
+        self.styles=21
         self.checkDelta=False
         self.delta=0
         self.deltaPing=0
@@ -77,12 +77,12 @@ class FooocusApi:
             return {"ajax":True, "error":False, "ping":True, "fooocusUrl": self.base_url}
         except Exception as e:
             if self.config.deltaPing<=10:
-                console.printBB("[warning]pingFooocus() failed. Trying to find the right gradio API fn_index (i+"+str(self.config.deltaPing)+")[/warning]")
+                console.printBB("[warning]pingFooocus() failed. Trying to find the right gradio API fn_index ("+str(self.config.ping)+"+"+str(self.config.deltaPing)+")[/warning]")
                 self.config.deltaPing+=1
-                self.config.deltaInit+=1
-                self.config.deltaGenerate+=1
-                self.config.deltaCancel+=1
-                self.config.deltaStyles+=1
+                #self.config.deltaInit+=1
+                #self.config.deltaGenerate+=1
+                #self.config.deltaCancel+=1
+                #self.config.deltaStyles+=1
                 self.config.deltaModels+=1
                 return self.pingFooocus(firstCall)
             else:
@@ -137,7 +137,8 @@ class FooocusApi:
             styles=[]
             if ("choices" in result):
                 for style in result["choices"]:
-                    styles.append(style[0])
+                    if style[0]!="Random Style":
+                        styles.append(style[0])
             return {"ajax":True, "error":False, "styles":styles}
         except:
             if self.config.deltaStyles<10:
@@ -153,8 +154,6 @@ class FooocusApi:
     # Get all Loras from the loras-directory
     def getLoras(self, dir):
         try:
-            console.printBB("getLoras() in dir")
-            console.printBB(dir)
             loras=utils.getFiles(dir, ".safetensors")
             return {"ajax":True, "error":False, "loras":loras}
         except:
@@ -289,12 +288,15 @@ class FooocusApi:
 				True,	# bool in 'Disable Preview' Checkbox component
 				True,	# bool in 'Disable Intermediate Results' Checkbox component
 				True,	# bool in 'Disable seed increment' Checkbox component
+				True,	# bool in 'Black Out NSFW' Checkbox component
 				float(admSplit[0]),	# int | float (numeric value between 0.1 and 3.0)							in 'Positive ADM Guidance Scaler' Slider component
 				float(admSplit[1]),	# int | float (numeric value between 0.1 and 3.0)							in 'Negative ADM Guidance Scaler' Slider component
 				float(admSplit[2]),	# int | float (numeric value between 0.0 and 1.0)							in 'ADM Guidance End At Step' Slider component
 				7,	# int | float (numeric value between 1.0 and 30.0)	in 'CFG Mimicking from TSNR' Slider component
+				1,	# int | float (numeric value between 1 and 12)  'CLIP Skip' Slider component
 				metadata["Sampler"],	# str (Option from: ['euler', 'euler_ancestral', 'heun', 'heunpp2', 'dpm_2', 'dpm_2_ancestral', 'lms', 'dpm_fast', 'dpm_adaptive', 'dpmpp_2s_ancestral', 'dpmpp_sde', 'dpmpp_sde_gpu', 'dpmpp_2m', 'dpmpp_2m_sde', 'dpmpp_2m_sde_gpu', 'dpmpp_3m_sde', 'dpmpp_3m_sde_gpu', 'ddpm', 'lcm', 'ddim', 'uni_pc', 'uni_pc_bh2'])								in 'Sampler' Dropdown component
 				metadata["Scheduler"],	# str (Option from: ['normal', 'karras', 'exponential', 'sgm_uniform', 'simple', 'ddim_uniform', 'lcm', 'turbo']) 								in 'Scheduler' Dropdown component
+				"Default (model)",	# str (Option from: ['Default (model)'])  'VAE' Dropdown component
 				-1,	# int | float (numeric value between -1 and 200)	in 'Forced Overwrite of Sampling Step' Slider component
 				-1,	# int | float (numeric value between -1 and 200)	in 'Forced Overwrite of Refiner Switch Step' Slider component
 				-1,	# int | float (numeric value between -1 and 2048)	in 'Forced Overwrite of Generating Width' Slider component

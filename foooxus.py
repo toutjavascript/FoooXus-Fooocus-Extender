@@ -20,10 +20,10 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import logging
 
 # Constants to identify version and execution modalities
-FOOOXUS_RELEASE="0.9.6"
-FOOOCUS_MIN_RELEASE="2.2.3"
+FOOOXUS_RELEASE="0.9.7"
+FOOOCUS_MIN_RELEASE="2.4.1"
 
-FOOOXUS_PYINSTALLER=False 
+FOOOXUS_PYINSTALLER=False
 
 
 
@@ -46,21 +46,21 @@ def checkVersions(requirements):
             console.printBB(" [error] Carefull, (venv) is not activated. You may experience module version issues[/error]")
         console.printBB("FoooXus ckecks installed module versions and compares them to requirements.txt")
 
-        console.printBB("  [b]Modules            Requirement       Installed version[/b]")
+    console.printBB("  [b]Modules            Requirement       Installed version[/b]")
 
-        for module in requirements:
-            if versions[module]==requirements[module]:
-                version="[ok]✔ "+versions[module]+"[/ok]"
-            else:
-                version="[error]X "+versions[module]+"[/error]"
-                require=False
-            
-            console.printBB("  [b]{:<19}".format(module)+"[/b]{:<18}".format(requirements[module])+version)
-
-        if require:
-            console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
+    for module in requirements:
+        if versions[module]==requirements[module]:
+            version="[ok]✔ "+versions[module]+"[/ok]"
         else:
-            console.printBB(" [error]One requirement is not met. FoooXus could fail[/error]")
+            version="[error]X "+versions[module]+"[/error]"
+            require=False
+        
+        console.printBB("  [b]{:<19}".format(module)+"[/b]{:<18}".format(requirements[module])+version)
+
+    if require:
+        console.printBB("[ok]All requirements are met. FoooXus should start :)[/ok]")
+    else:
+        console.printBB(" [error]One requirement is not met. FoooXus could fail[/error]")
     print("")
 
     versions["OS"]=OS
