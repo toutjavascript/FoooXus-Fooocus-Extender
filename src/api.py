@@ -11,12 +11,12 @@ from gradio_client import Client
 
 class ConfigApi:
     def __init__(self):
-        self.ping=11
+        self.ping=29
         self.cancel=0
-        self.init=35
-        self.generate=46
-        self.models=32
-        self.styles=21
+        self.init=51
+        self.generate=67
+        self.models=46
+        self.styles=64
         self.checkDelta=False
         self.delta=0
         self.deltaPing=0
@@ -288,7 +288,7 @@ class FooocusApi:
 				True,	# bool in 'Disable Preview' Checkbox component
 				True,	# bool in 'Disable Intermediate Results' Checkbox component
 				True,	# bool in 'Disable seed increment' Checkbox component
-				True,	# bool in 'Black Out NSFW' Checkbox component
+				False,	# bool in 'Black Out NSFW' Checkbox component
 				float(admSplit[0]),	# int | float (numeric value between 0.1 and 3.0)							in 'Positive ADM Guidance Scaler' Slider component
 				float(admSplit[1]),	# int | float (numeric value between 0.1 and 3.0)							in 'Negative ADM Guidance Scaler' Slider component
 				float(admSplit[2]),	# int | float (numeric value between 0.0 and 1.0)							in 'ADM Guidance End At Step' Slider component
@@ -324,7 +324,8 @@ class FooocusApi:
 				False,	# bool in 'Enable Mask Upload' Checkbox component
 				False,	# bool in 'Invert Mask' Checkbox component
 				-64,	# int | float (numeric value between -64 and 64)								in 'Mask Erode or Dilate' Slider component
-				False,	# bool in 'Save Metadata to Images' Checkbox component
+				False,	# bool in 'Save only final enhanced image' Checkbox component
+                False,	# bool in 'Save Metadata to Images' Checkbox component
                 "fooocus",	# str in 'Metadata Scheme' Radio component
 				self.emptyImage,	# str (filepath or URL to image) in 'Image' Image component
 				0,	# int | float (numeric value between 0.0 and 1.0)							in 'Stop At' Slider component
@@ -342,6 +343,62 @@ class FooocusApi:
 				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Stop At' Slider component
 				0,	# int | float (numeric value between 0.0 and 2.0)								in 'Weight' Slider component
 				"ImagePrompt",	# str in 'Type' Radio component
+                False,	# bool in 'Debug GroundingDINO' Checkbox component
+				-64,	# int | float (numeric value between -64 and 64)								in 'GroundingDINO Box Erode or Dilate' Slider component
+				False,	# bool in 'Debug Enhance Masks' Checkbox component
+				self.emptyImage,	# str (filepath or URL to image)
+				False,	# bool in 'Enhance' Checkbox component
+				"Disabled",	# str in 'Upscale or Variation:' Radio component
+				"Before First Enhancement",	# str in 'Order of Processing' Radio component
+				"Original Prompts",	# str in 'Prompt' Radio component
+				False,	# bool in 'Enable' Checkbox component
+				"Howdy!",	# str in 'Detection prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement positive prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement negative prompt' Textbox component
+				"u2net",	# str (Option from: ['u2net', 'u2netp', 'u2net_human_seg', 'u2net_cloth_seg', 'silueta', 'isnet-general-use', 'isnet-anime', 'sam'])
+				"full",	# str (Option from: ['full', 'upper', 'lower'])								in 'Cloth category' Dropdown component
+				"vit_b",	# str (Option from: ['vit_b', 'vit_l', 'vit_h'])								in 'SAM model' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Text Threshold' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Box Threshold' Slider component
+				0,	# int | float (numeric value between 0 and 10)								in 'Maximum number of detections' Slider component
+				False,	# bool in 'Disable initial latent in inpaint' Checkbox component
+				"None",	# str (Option from: ['None', 'v1', 'v2.5', 'v2.6'])								in 'Inpaint Engine' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Denoising Strength' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Respective Field' Slider component
+				-64,	# int | float (numeric value between -64 and 64)								in 'Mask Erode or Dilate' Slider component
+				False,	# bool in 'Invert Mask' Checkbox component
+				False,	# bool in 'Enable' Checkbox component
+				"Howdy!",	# str in 'Detection prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement positive prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement negative prompt' Textbox component
+				"u2net",	# str (Option from: ['u2net', 'u2netp', 'u2net_human_seg', 'u2net_cloth_seg', 'silueta', 'isnet-general-use', 'isnet-anime', 'sam'])								in 'Mask generation model' Dropdown component
+				"full",	# str (Option from: ['full', 'upper', 'lower'])								in 'Cloth category' Dropdown component
+				"vit_b",	# str (Option from: ['vit_b', 'vit_l', 'vit_h'])								in 'SAM model' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Text Threshold' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Box Threshold' Slider component
+				0,	# int | float (numeric value between 0 and 10)								in 'Maximum number of detections' Slider component
+				False,	# bool in 'Disable initial latent in inpaint' Checkbox component
+				"None",	# str (Option from: ['None', 'v1', 'v2.5', 'v2.6'])								in 'Inpaint Engine' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Denoising Strength' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Respective Field' Slider component
+				-64,	# int | float (numeric value between -64 and 64)								in 'Mask Erode or Dilate' Slider component
+				False,	# bool in 'Invert Mask' Checkbox component
+				False,	# bool in 'Enable' Checkbox component
+				"Howdy!",	# str in 'Detection prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement positive prompt' Textbox component
+				"Howdy!",	# str in 'Enhancement negative prompt' Textbox component
+				"u2net",	# str (Option from: ['u2net', 'u2netp', 'u2net_human_seg', 'u2net_cloth_seg', 'silueta', 'isnet-general-use', 'isnet-anime', 'sam'])
+				"full",	# str (Option from: ['full', 'upper', 'lower'])								in 'Cloth category' Dropdown component
+				"vit_b",	# str (Option from: ['vit_b', 'vit_l', 'vit_h'])								in 'SAM model' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Text Threshold' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Box Threshold' Slider component
+				0,	# int | float (numeric value between 0 and 10)								in 'Maximum number of detections' Slider component
+				False,	# bool in 'Disable initial latent in inpaint' Checkbox component
+				"None",	# str (Option from: ['None', 'v1', 'v2.5', 'v2.6'])								in 'Inpaint Engine' Dropdown component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Denoising Strength' Slider component
+				0,	# int | float (numeric value between 0.0 and 1.0)								in 'Inpaint Respective Field' Slider component
+				-64,	# int | float (numeric value between -64 and 64)								in 'Mask Erode or Dilate' Slider component
+				False,	# bool in 'Invert Mask' Checkbox component
                 fn_index=self.config.generate+self.config.deltaGenerate
             )
 

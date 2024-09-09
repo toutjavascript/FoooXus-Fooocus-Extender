@@ -82,6 +82,8 @@ FoooXus can now force Performance Settings when those models are used. New butto
 - FoooXus version is tested with V2.4.1 Fooocus Release.
 
 ## History Log
+V1.0.0 Update to V2.5.5 Fooocus Release
+
 V0.9.7 Update to V2.4.1 Fooocus Release
 
 V0.9.6 New optional loras-directory parameter on config.json
